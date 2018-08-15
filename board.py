@@ -91,6 +91,13 @@ def populate():
                 Grid(i,j).pieceStatus = True
             place += 1
 
+        # set pieceStatus to false for the rest
+        place = 2
+        for i in range(4):
+            i = place
+            for j in range(8):
+                Grid(i,j).pieceStatus = False
+
         # copy square coordinates to pieces
         for i in range(8):
             for j in range(8):
