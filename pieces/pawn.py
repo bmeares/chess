@@ -39,24 +39,27 @@ class Pawn(Piece):
             board.Grid((self.row + (2 * dn) ), self.col).option = optionCounter
             optionCounter += 1
 
-
-        diagColor = board.Grid((self.row + (1 * dn)), (self.col - 1)).piece.color
-
         # Check for diagonal enemies
-        if ( diagColor != self.color and diagColor != "none"):
-            availMoves.append(board.Grid((self.row + (1 * dn)), (self.col - 1)))
-            board.Grid((self.row + (1 * dn)), (self.col - 1)).des = True
-            board.Grid((self.row + (1 * dn)), (self.col - 1)).option = optionCounter
-            optionCounter += 1
+        # left
+        if self.col != 0:
+            diagColor = board.Grid((self.row + (1 * dn)), (self.col - 1)).piece.color
 
-        diagColor = board.Grid((self.row + (1 * dn)), (self.col + 1)).piece.color
+            if ( diagColor != self.color and diagColor != "none"):
+                availMoves.append(board.Grid((self.row + (1 * dn)), (self.col - 1)))
+                board.Grid((self.row + (1 * dn)), (self.col - 1)).des = True
+                board.Grid((self.row + (1 * dn)), (self.col - 1)).option = optionCounter
+                optionCounter += 1
 
-        if ( diagColor != self.color and diagColor != "none"):
-            availMoves.append(board.Grid((self.row + (1 * dn)), (self.col + 1)))
-            board.Grid((self.row + (1 * dn)), (self.col + 1)).des = True
-            board.Grid((self.row + (1 * dn)), (self.col + 1)).option = optionCounter
-            optionCounter += 1
+        # right
+        if self.col != 7:
+            diagColor = board.Grid((self.row + (1 * dn)), (self.col + 1)).piece.color
+
+            if ( diagColor != self.color and diagColor != "none"):
+                availMoves.append(board.Grid((self.row + (1 * dn)), (self.col + 1)))
+                board.Grid((self.row + (1 * dn)), (self.col + 1)).des = True
+                board.Grid((self.row + (1 * dn)), (self.col + 1)).option = optionCounter
+                optionCounter += 1
 
         self.firstMove = False
-        
+
         return availMoves

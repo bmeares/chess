@@ -24,7 +24,7 @@ class Square:
         global u_block
 
         if self.des:
-            if self.pieceStatus:
+            if self.pieceStatus and self.option < 10:
                 print(self.piece, end = "")
             elif self.option < 10:
                 print(" ",end="")
