@@ -60,6 +60,4 @@ class Pawn(Piece):
                 board.Grid((self.row + (1 * dn)), (self.col + 1)).option = optionCounter
                 optionCounter += 1
 
-        self.firstMove = False
-
         return availMoves

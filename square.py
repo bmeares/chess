@@ -39,7 +39,7 @@ class Square:
             else:
                 if self.piece.color == "W":
                     print("'", end="")
-                else:
+                elif self.piece.color == "b":
                     print(".", end="")
 
         else:

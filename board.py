@@ -5,6 +5,7 @@ of the game board.
 
 import pieces
 from square import Square
+import globVar
 
 grid = []
 
@@ -48,62 +49,70 @@ def populate():
                 grid[i][place + 1].col = (place + 1)
                 place += 2
 
-        # Fill board with pieces
+    # Fill board with pieces
 
-        # black
-        plr = "b"
-        Grid(0,0).piece = pieces.Rook(plr, "rook")
-        Grid(0,1).piece = pieces.Knight(plr, "knight")
-        Grid(0,2).piece = pieces.Bishop(plr, "bishop")
-        Grid(0,3).piece = pieces.Queen(plr, "queen")
-        Grid(0,4).piece = pieces.King(plr, "king")
-        Grid(0,5).piece = pieces.Bishop(plr, "bishop")
-        Grid(0,6).piece = pieces.Knight(plr, "knight")
-        Grid(0,7).piece = pieces.Rook(plr, "rook")
+    # black
+    plr = "b"
+    Grid(0,0).piece = pieces.Rook(plr, "rook")
+    Grid(0,1).piece = pieces.Knight(plr, "knight")
+    Grid(0,2).piece = pieces.Bishop(plr, "bishop")
+    Grid(0,3).piece = pieces.Queen(plr, "queen")
+    Grid(0,4).piece = pieces.King(plr, "king")
+    Grid(0,5).piece = pieces.Bishop(plr, "bishop")
+    Grid(0,6).piece = pieces.Knight(plr, "knight")
+    Grid(0,7).piece = pieces.Rook(plr, "rook")
 
-        for i in range(8):
-            Grid(1,i).piece = pieces.Pawn(plr, "pawn")
+    for i in range(8):
+        Grid(1,i).piece = pieces.Pawn(plr, "pawn")
 
-        # set pieceStatus flag to true for black pieces
-        for i in range(2):
-            for j in range(8):
-                Grid(i,j).pieceStatus = True
+    # set pieceStatus and piece_ID for black pieces
+    piece_ID = 0
+    for i in range(2):
+        for j in range(8):
+            Grid(i,j).pieceStatus = True
+            Grid(i,j).piece.label = piece_ID
+            piece_ID += 1
+            globVar.b_pieces.append(Grid(i,j).piece)
 
-        # white
-        plr = "W"
-        Grid(7,0).piece = pieces.Rook(plr, "rook")
-        Grid(7,1).piece = pieces.Knight(plr, "knight")
-        Grid(7,2).piece = pieces.Bishop(plr, "bishop")
-        Grid(7,3).piece = pieces.Queen(plr, "queen")
-        Grid(7,4).piece = pieces.King(plr, "king")
-        Grid(7,5).piece = pieces.Bishop(plr, "bishop")
-        Grid(7,6).piece = pieces.Knight(plr, "knight")
-        Grid(7,7).piece = pieces.Rook(plr, "rook")
+    # white
+    plr = "W"
+    Grid(7,0).piece = pieces.Rook(plr, "rook")
+    Grid(7,1).piece = pieces.Knight(plr, "knight")
+    Grid(7,2).piece = pieces.Bishop(plr, "bishop")
+    Grid(7,3).piece = pieces.Queen(plr, "queen")
+    Grid(7,4).piece = pieces.King(plr, "king")
+    Grid(7,5).piece = pieces.Bishop(plr, "bishop")
+    Grid(7,6).piece = pieces.Knight(plr, "knight")
+    Grid(7,7).piece = pieces.Rook(plr, "rook")
 
-        for i in range(8):
-            Grid(6,i).piece = pieces.Pawn(plr, "pawn")
+    for i in range(8):
+        Grid(6,i).piece = pieces.Pawn(plr, "pawn")
 
-        # set pieceStatus flag to true for white pieces
-        place = 6
-        for i in range(2):
-            i = place
-            for j in range(8):
-                Grid(i,j).pieceStatus = True
-            place += 1
+    # set pieceStatus and assign ID to white pieces
+    place = 6
+    piece_ID = 0
+    for i in range(2):
+        i = place
+        for j in range(8):
+            Grid(i,j).pieceStatus = True
+            Grid(i,j).piece.label = piece_ID
+            piece_ID += 1
+            globVar.w_pieces.append(Grid(i,j).piece)
+        place += 1
 
-        # set pieceStatus to false for the rest
-        place = 2
-        for i in range(4):
-            i = place
-            for j in range(8):
-                Grid(i,j).pieceStatus = False
+    # set pieceStatus to false for the rest
+    place = 2
+    for i in range(4):
+        i = place
+        for j in range(8):
+            Grid(i,j).pieceStatus = False
 
-        # copy square coordinates to pieces
-        for i in range(8):
-            for j in range(8):
-                if Grid(i,j).pieceStatus:
-                    Grid(i,j).piece.row = Grid(i,j).row
-                    Grid(i,j).piece.col = Grid(i,j).col
+    # copy square coordinates to pieces
+    for i in range(8):
+        for j in range(8):
+            if Grid(i,j).pieceStatus:
+                Grid(i,j).piece.row = Grid(i,j).row
+                Grid(i,j).piece.col = Grid(i,j).col
 
     # Clip board to 8 x 8
     while len(grid) > 8:

@@ -3,7 +3,7 @@ class Piece:
         self.color = color
         self.selected = False
         self.type = type
-        self.label = ""
+        self.label = -1
         self.row = -1
         self.col = -1
 

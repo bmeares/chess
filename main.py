@@ -9,11 +9,16 @@ import utils
 import board
 import Player
 import globVar
+import pathlib
 
 def main():
+    path = pathlib.Path("chess.save")
+    if path.exists():
+        Canvas.loadSave()
+        running = True
+    else:
+        running = Canvas.startScreen()
 
-    running = Canvas.startScreen()
-    # TODO readSave
     while(running):
         running = state()
 
@@ -21,16 +26,20 @@ def main():
 def state():
 
     playing = True
-    playerCount = 0
 
     while playing:
-        if (playerCount % 2) == 0:
+        if (globVar.playerCount % 2) == 0:
             globVar.player = "W"
         else:
             globVar.player = "b"
+
         Player.turn()
-        playerCount += 1
+        globVar.playerCount += 1
         #TODO clear and write save
+        utils.clearSave()
+        utils.writeSave()
+
+        playing = utils.checkWin()
 
     return playing
 

@@ -8,6 +8,8 @@ import platform
 import random
 import board
 import globVar
+import sys
+import utils
 
 def drawBoard():
     clear()
@@ -44,7 +46,10 @@ def nowPlaying():
     print(" ",end="")
     for i in range(23):
         print("-",end="")
-    print("\n |    NOW PLAYING: ", globVar.player, " |")
+    if globVar.w_check or globVar.b_check:
+        print("\n |       CHECK!    ", globVar.player, " |")
+    else:
+        print("\n |    NOW PLAYING: ", globVar.player, " |")
     print(" ",end="")
     for i in range(23):
         print("-",end="")
@@ -108,3 +113,63 @@ def clear():
         os.system("CLS")
     else:
         print("\033c")
+
+def chooseCol():
+    while True:
+        try:
+            choice = input("\n Choose a column (letter): ")
+        except ValueError:
+            colError()
+            continue
+        if choice == "q":
+            quit()
+        elif (choice == "" or len(choice) > 1 or
+        ord(choice.upper()) < ord('A') or ord(choice.upper()) > ord('H')):
+            colError()
+            continue
+        else:
+            break
+    return choice
+
+def chooseRow():
+    while True:
+        try:
+            choice = input("\n Choose a row (number): ")
+        except ValueError:
+            rowError()
+            continue
+        if choice == "q":
+            quit()
+        elif(int(choice) < 1 or int(choice) > 8 or choice == "" or not choice.isdigit()):
+            rowError()
+            continue
+        else:
+            break
+
+    return int(choice)
+
+def quit():
+    clear()
+    print("\n Would you like to save your game? ", end="")
+    y = yesNo()
+    clear()
+    if y:
+        utils.writeSave()
+    sys.exit(0)
+
+def yesNo():
+    y = input("(y/n): ")
+    if (y.upper() == "Y" or y.upper() == "YES"):
+        return True
+    else:
+        return False
+
+def loadSave():
+    clear()
+    print("\n Save detected. Load previous game? ", end="")
+    y = yesNo()
+    if y:
+        board.populate()
+        utils.readSave()
+    else:
+        board.populate()

@@ -27,7 +27,10 @@ def turn():
                 Canvas.drawBoard()
 
     choice = choose(availMoves)
-    utils.move(fromSqr, availMoves, choice)
+    pc = utils.move(fromSqr, availMoves, choice)
+
+    # Check for check
+    utils.check_king()
 
 def select():
     print(" Select which piece to move.")

@@ -1,3 +1,10 @@
 numPlayers = -1
 player = ""
 noPlayers = False
+playerCount = 0
+w_NumPieces = 16
+b_NumPieces = 16
+w_check = False
+b_check = False
+w_pieces = []
+b_pieces = []
