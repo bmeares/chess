@@ -36,7 +36,6 @@ def drawBoard():
         print("|",end="")
         numLabel -= 1
         print("\n", end = "")
-#    print("\n", end = "")
     print("    ",end="")
     for i in range(18):
         print("¯",end="")
@@ -57,13 +56,37 @@ def nowPlaying():
 def startScreen():
     clear()
     print("\n Welcome to Chess: Python Edition!\n\n")
-    globVar.numPlayers = int(input(" How many players for this game?\n (0, 1, or 2): "))
 
-    while globVar.numPlayers < 0 or globVar.numPlayers > 2:
-        globVar.numPlayers = int(input("\n Please choose between 0 and 2: "))
+    while True:
+        try:
+            n = input(" How many players for this game?\n (0, 1, or 2): ")
+        except ValueError:
+            print("\n Please choose between 0 and 2.")
+            pressEnter()
+        if n.upper() == "Q":
+            quit()
+        elif n.upper() == "R":
+            board.populate()
+            clear()
+            print("\n The board has been reset.")
+            pressEnter()
+        elif n.upper() == "L":
+            utils.readSave()
+            clear()
+            print("\n The last save has been loaded.")
+            pressEnter()
+        elif (int(n) < 0) or (int(n) > 2):
+            print("\n Please choose between 0 and 2.")
+            pressEnter()
+            continue
+        else:
+            break
+    globVar.numPlayers = int(n)
 
     if globVar.numPlayers < 2:
         random.seed(a=None)
+    if globVar.numPlayers == 0:
+        globVar.noPlayers = True
 
     board.populate()
 
@@ -74,13 +97,18 @@ def chooseAvailableMessage():
     print("\n Please choose a piece with available moves.")
     pressEnter()
 
+def getouttacheckMessage():
+    errorSeparator()
+    print("\n Choose a move to get out of check.")
+    pressEnter()
+
 def pickValidMoveMessage():
     errorSeparator()
     print("\n Please pick a valid move.")
     pressEnter()
 
 def pressEnter():
-    print(" Press Enter to try again.")
+    print(" Press Enter to continue.")
     input("")
     drawBoard()
 
@@ -118,12 +146,11 @@ def chooseCol():
     while True:
         try:
             choice = input("\n Choose a column (letter): ")
+            choices(choice)
         except ValueError:
             colError()
             continue
-        if choice == "q":
-            quit()
-        elif (choice == "" or len(choice) > 1 or
+        if (choice == "" or len(choice) > 1 or
         ord(choice.upper()) < ord('A') or ord(choice.upper()) > ord('H')):
             colError()
             continue
@@ -135,18 +162,57 @@ def chooseRow():
     while True:
         try:
             choice = input("\n Choose a row (number): ")
+            choices(choice)
         except ValueError:
             rowError()
             continue
-        if choice == "q":
-            quit()
-        elif(int(choice) < 1 or int(choice) > 8 or choice == "" or not choice.isdigit()):
+
+        if not choice.isdigit() or choice == "":
+            rowError()
+            continue
+
+        elif int(choice) < 1 or int(choice) > 8:
             rowError()
             continue
         else:
             break
 
     return int(choice)
+
+def chooseMove(availMovesL):
+    while True:
+        try:
+            choice = input("\n Choose a move (number): ")
+            choices(choice)
+        except ValueError:
+            pickValidMoveMessage()
+            continue
+
+        if not choice.isdigit() or choice == "":
+            pickValidMoveMessage()
+            continue
+
+        elif (int(choice) < 1) or (int(choice) > availMovesL):
+            pickValidMoveMessage()
+            continue
+        else:
+            break
+
+    return int(choice)
+
+def choices(choice):
+    if choice.upper() == "Q":
+        quit()
+    elif choice.upper() == "R":
+        board.populate()
+        clear()
+        print("\n The board has been reset.")
+        pressEnter()
+    elif choice.upper() == "L":
+        utils.readSave()
+        clear()
+        print("\n The last save has been loaded.")
+        pressEnter()
 
 def quit():
     clear()
@@ -155,6 +221,8 @@ def quit():
     clear()
     if y:
         utils.writeSave()
+    else:
+        os.remove("chess.save")
     sys.exit(0)
 
 def yesNo():

@@ -12,13 +12,14 @@ import globVar
 
 def turn():
     Canvas.drawBoard()
-
     runagain = True
 
     if not globVar.noPlayers:
         while runagain:
             fromSqr = select()
             availMoves = fromSqr.piece.scan()
+            # remove invalid moves
+            availMoves = utils.remove_invalid_moves(availMoves, fromSqr.piece)
             runagain = not utils.hasMoves(availMoves)
 
             if runagain:
@@ -31,6 +32,14 @@ def turn():
 
     # Check for check
     utils.check_king()
+    # revert back if still in check
+    if ((globVar.w_check and globVar.player == "W") or
+    (globVar.b_check and globVar.player == "b")):
+        Canvas.getouttacheckMessage()
+        utils.moveBack(pc, fromSqr.piece)
+        turn()
+    # reset removed flag
+    globVar.removed = False
 
 def select():
     print(" Select which piece to move.")
@@ -47,16 +56,9 @@ def select():
 
     return board.Grid(row,col)
 
+
 def choose(availMoves):
     Canvas.drawBoard()
-    running = True
-
-    while running:
-        running = False
-        choice = int(input(" Choose a move (number): "))
-
-        if (choice < 1) or (choice > len(availMoves)):
-            Canvas.pickValidMoveMessage()
-            running = True
+    choice = Canvas.chooseMove(len(availMoves))
 
     return choice

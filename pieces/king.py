@@ -1,5 +1,9 @@
 from pieces import Piece
+from pieces import Pawn
 import board
+import copy
+import globVar
+import utils
 
 class King(Piece):
     def __init__(self, color, type):
@@ -119,5 +123,11 @@ class King(Piece):
                 availMoves.append(board.Grid(rowCount, colCount))
                 if board.Grid(rowCount, colCount).pieceStatus:
                     pieceFound = True
+
+        # check availMoves and remove the ones that put user in check
+        # if ((self.color == "W" and globVar.w_check) or
+        # (self.color == "b" and globVar.b_check) and
+        # not globVar.scanning):
+        #     availMoves = utils.remove_invalid_moves(availMoves, self)
 
         return availMoves

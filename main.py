@@ -35,11 +35,10 @@ def state():
 
         Player.turn()
         globVar.playerCount += 1
-        #TODO clear and write save
+        utils.check_king()
+        playing = utils.checkWin()
         utils.clearSave()
         utils.writeSave()
-
-        playing = utils.checkWin()
 
     return playing
 

@@ -121,9 +121,32 @@ def populate():
         while len(grid[i]) > 8:
             grid[i].pop()
 
+    # initialize global variables
+    resetGlobal()
+
 # return reference to grid
 def Grid(row, col):
     return grid[row][col]
+
+def resetGlobal():
+    globVar.numPlayers = -1
+    globVar.player = "W"
+    globVar.noPlayers = False
+    globVar.playerCount = 0
+    globVar.w_NumPieces = 16
+    globVar.b_NumPieces = 16
+    globVar.r_w_NumPieces = 1
+    globVar.r_b_NumPieces = 1
+    globVar.w_check = False
+    globVar.b_check = False
+    globVar.removed = False
+    globVar.removed_label = -1
+    globVar.removed_color = "none"
+    globVar.last_row = -1
+    globVar.last_col = -1
+    globVar.scanning = False
+    globVar.r_w_pieces = [pieces.Pawn("none", "none")]
+    globVar.r_b_pieces = [pieces.Pawn("none", "none")]
 
 # update grid with toSqr
 def uGrid(pc):
