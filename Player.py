@@ -41,11 +41,11 @@ def turn():
     if ((globVar.w_check and globVar.player == "W") or
     (globVar.b_check and globVar.player == "b")):
         Canvas.getouttacheckMessage()
-        utils.moveBack(pc, fromSqr.piece)
+        utils.undoMove()
+        # utils.moveBack(pc, fromSqr.piece)
         turn()
     # reset removed flag
     globVar.removed = False
-    utils.clearMovesHistory()
 
 def select():
     print(" Select which piece to move.")

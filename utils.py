@@ -14,9 +14,14 @@ import pieces
 def remove_invalid_moves(availMoves):
     i = 0
     while i < len(availMoves):
+        print(i)
+        input("")
         if globVar.r_avail[i].option == -2:
             availMoves.pop(i)
-            i -= 1
+            globVar.r_avail.pop(i)
+            print("POPPED!")
+            input("")
+            # i -= 1
         i += 1
     return availMoves
     # for i in range(len(availMoves)):
@@ -44,6 +49,10 @@ def mark_invalid_moves(availMoves, pc):
             board.Grid(availMoves[i].row, availMoves[i].col).option = -2
             availMoves[i].option = -2
             globVar.r_avail[i].option = -2
+            print("MARKED FOR DELETION")
+            input("")
+        # print(pc.color, globVar.b_check, availMoves[i].option)
+        # input("")
 
     availMoves = remove_invalid_moves(availMoves)
     return availMoves
