@@ -863,5 +863,6 @@ def undoMove():
     if not globVar.removed:
         board.Grid(tpc.row,tpc.col).pieceStatus = False
         board.Grid(tpc.row,tpc.col).piece.color = "none"
-    globVar.removed = False
+
     un_deletePiece(fpc)
+    globVar.removed = False
