@@ -1,4 +1,5 @@
 import pieces
+import square
 
 numPlayers = -1
 player = ""
@@ -16,7 +17,9 @@ removed_color = "none"
 last_row = -1
 last_col = -1
 scanning = False
+r_avail_Num = 1
 w_pieces = []
 b_pieces = []
 r_w_pieces = [pieces.Pawn("none", "none")]
 r_b_pieces = [pieces.Pawn("none", "none")]
+r_avail = [square.Square(False, "none", pieces.Pawn("none","none"), -1, -1)]

@@ -6,6 +6,7 @@ of the game board.
 import pieces
 from square import Square
 import globVar
+import utils
 
 grid = []
 
@@ -124,6 +125,9 @@ def populate():
     # initialize global variables
     resetGlobal()
 
+    # reset moves history
+    utils.clearMovesHistory()
+
 # return reference to grid
 def Grid(row, col):
     return grid[row][col]
@@ -145,8 +149,10 @@ def resetGlobal():
     globVar.last_row = -1
     globVar.last_col = -1
     globVar.scanning = False
+    globVar.r_avail_Num = 1
     globVar.r_w_pieces = [pieces.Pawn("none", "none")]
     globVar.r_b_pieces = [pieces.Pawn("none", "none")]
+    globVar.r_avail = [Square(False, "none", pieces.Pawn("none","none"), -1, -1)]
 
 # update grid with toSqr
 def uGrid(pc):

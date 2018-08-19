@@ -22,8 +22,16 @@ class Pawn(Piece):
             dn = 1
         availMoves = []
         optionCounter = 1
-        blocked = board.Grid((self.row + (1 * dn) ), self.col).pieceStatus
-        doubleBlocked = board.Grid((self.row + (2 * dn) ), self.col).pieceStatus
+        blocked = True
+        doubleBlocked = True
+
+        if ((self.row > 0 and self.color == "W") or
+        (self.row < 7 and self.color == "b")):
+            blocked = board.Grid((self.row + (1 * dn) ), self.col).pieceStatus
+
+        if ((self.row > 1 and self.color == "W") or
+        (self.row < 6 and self.color == "b")):
+            doubleBlocked = board.Grid((self.row + (2 * dn) ), self.col).pieceStatus
 
         # Scan directly ahead
         if (not blocked):

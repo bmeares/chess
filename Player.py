@@ -9,6 +9,7 @@ import utils
 import board
 import utils
 import globVar
+import copy
 
 def turn():
     Canvas.drawBoard()
@@ -18,8 +19,12 @@ def turn():
         while runagain:
             fromSqr = select()
             availMoves = fromSqr.piece.scan()
+            globVar.r_avail = copy.deepcopy(availMoves)
+            globVar.r_avail_Num = len(globVar.r_avail)
+
             # remove invalid moves
-            availMoves = utils.remove_invalid_moves(availMoves, fromSqr.piece)
+            availMoves = utils.mark_invalid_moves(availMoves, fromSqr.piece)
+            availMoves = utils.remove_invalid_moves(availMoves)
             runagain = not utils.hasMoves(availMoves)
 
             if runagain:
@@ -40,6 +45,7 @@ def turn():
         turn()
     # reset removed flag
     globVar.removed = False
+    utils.clearMovesHistory()
 
 def select():
     print(" Select which piece to move.")
