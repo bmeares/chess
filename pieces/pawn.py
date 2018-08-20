@@ -49,7 +49,7 @@ class Pawn(Piece):
 
         # Check for diagonal enemies
         # left
-        if self.col != 0:
+        if self.col > 0 and (self.row + (1 * dn)) > 0 and (self.row + (1 * dn)) < 7:
             diagColor = board.Grid((self.row + (1 * dn)), (self.col - 1)).piece.color
 
             if ( diagColor != self.color and diagColor != "none"):
@@ -59,7 +59,7 @@ class Pawn(Piece):
                 optionCounter += 1
 
         # right
-        if self.col != 7:
+        if self.col < 7 and (self.row + (1 * dn)) > 0 and (self.row + (1 * dn)) < 7:
             diagColor = board.Grid((self.row + (1 * dn)), (self.col + 1)).piece.color
 
             if ( diagColor != self.color and diagColor != "none"):

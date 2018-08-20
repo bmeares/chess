@@ -41,17 +41,48 @@ def drawBoard():
         print("¯",end="")
     print("\n",end="")
 
+    remaining()
+
 def nowPlaying():
     print(" ",end="")
     for i in range(23):
         print("-",end="")
-    if globVar.w_check or globVar.b_check:
+    if( (globVar.w_check and globVar.player == "W") or
+    (globVar.b_check and globVar.player == "b")):
         print("\n |       CHECK!    ", globVar.player, " |")
     else:
         print("\n |    NOW PLAYING: ", globVar.player, " |")
     print(" ",end="")
     for i in range(23):
         print("-",end="")
+
+def remaining():
+    w_pawn_count = utils.typeCounter("pawn", "W")
+    w_rook_count = utils.typeCounter("rook", "W")
+    w_knight_count = utils.typeCounter("knight", "W")
+    w_bishop_count = utils.typeCounter("bishop", "W")
+    w_queen_count = utils.typeCounter("queen", "W")
+    w_king_count = utils.typeCounter("king", "W")
+    b_pawn_count = utils.typeCounter("pawn", "b")
+    b_rook_count = utils.typeCounter("rook", "b")
+    b_knight_count = utils.typeCounter("knight", "b")
+    b_bishop_count = utils.typeCounter("bishop", "b")
+    b_queen_count = utils.typeCounter("queen", "b")
+    b_king_count = utils.typeCounter("king", "b")
+
+    print(" ",end="")
+    print("       REMAINING:\n ", end="")
+    for i in range(23):
+        print("_",end="")
+    print("\n   White:   |   Black:")
+    print("  {}P'  {}R'  |  {}p.  {}r.".format(w_pawn_count, w_rook_count, b_pawn_count, b_rook_count))
+    print("  {}N'  {}B'  |  {}n.  {}b.".format(w_knight_count, w_bishop_count, b_knight_count, b_bishop_count))
+    print("  {}Q'  {}K'  |  {}q.  {}k.".format(w_queen_count, w_king_count, b_queen_count, b_king_count))
+
+    print(" ",end="")
+    for i in range(23):
+        print("¯",end="")
+    print("\n")
 
 def startScreen():
     clear()
@@ -75,12 +106,13 @@ def startScreen():
             clear()
             print("\n The last save has been loaded.")
             pressEnter()
-        elif (int(n) < 0) or (int(n) > 2):
+        elif (int(n) < 0) or (int(n) > 2) or not n.isdigit():
             print("\n Please choose between 0 and 2.")
             pressEnter()
             continue
         else:
             break
+
     globVar.numPlayers = int(n)
 
     if globVar.numPlayers < 2:
@@ -240,4 +272,5 @@ def loadSave():
         board.populate()
         utils.readSave()
     else:
-        board.populate()
+        # board.populate()
+        startScreen()

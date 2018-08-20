@@ -11,22 +11,53 @@ from square import Square
 from pieces import Piece
 import pieces
 
+def clearAllOptions():
+    for i in range(8):
+        for j in range(8):
+            board.Grid(i,j).option = 0
+
+def potenial_moves():
+    # reset p_w_moves and p_b_moves
+    globVar.p_w_moves = []
+    globVar.p_b_moves = []
+    globVar.p_w_Num = 0
+    globVar.p_b_Num = 0
+
+    # populate p_w_Moves
+    for i in range(len(globVar.w_pieces)):
+        fpc = globVar.w_pieces[i]
+        am = fpc.scan()
+        globVar.r_avail = copy.deepcopy(am)
+        am = mark_invalid_moves(am, fpc)
+        globVar.p_w_moves.extend(am)
+        globVar.p_w_Num += len(am)
+        board.Grid(globVar.w_pieces[i].row, globVar.w_pieces[i].col).piece.selected = False
+    un_resetAvailMoves(globVar.p_w_moves)
+
+    # populate p_b_Moves
+    for i in range(len(globVar.b_pieces)):
+        fpc = globVar.b_pieces[i]
+        am = fpc.scan()
+        globVar.r_avail = copy.deepcopy(am)
+        am = mark_invalid_moves(am, fpc)
+        am = remove_invalid_moves(am)
+        globVar.p_b_moves.extend(am)
+        globVar.p_b_Num += len(am)
+        board.Grid(globVar.b_pieces[i].row, globVar.b_pieces[i].col).piece.selected = False
+    un_resetAvailMoves(globVar.p_b_Moves)
+
 def remove_invalid_moves(availMoves):
     i = 0
     while i < len(availMoves):
-        print(i)
-        input("")
         if globVar.r_avail[i].option == -2:
+            board.Grid(availMoves[i].row, availMoves[i].col).des = False
+            board.Grid(availMoves[i].row, availMoves[i].col).option = -2
             availMoves.pop(i)
+
             globVar.r_avail.pop(i)
-            print("POPPED!")
-            input("")
-            # i -= 1
         i += 1
+
     return availMoves
-    # for i in range(len(availMoves)):
-    #     if availMoves[i],option == -2:
-    #         availMoves.pop(i)
 
 def mark_invalid_moves(availMoves, pc):
     fpc = copy.deepcopy(pc)
@@ -36,9 +67,7 @@ def mark_invalid_moves(availMoves, pc):
         check_king()
 
         # undo move
-        # moveBack(am[i].piece, fpc)
         undoMove()
-        # clearMovesHistory()
         pc.color = fpc.color
         un_resetAvailMoves(am)
 
@@ -49,8 +78,6 @@ def mark_invalid_moves(availMoves, pc):
             board.Grid(availMoves[i].row, availMoves[i].col).option = -2
             availMoves[i].option = -2
             globVar.r_avail[i].option = -2
-            print("MARKED FOR DELETION")
-            input("")
         # print(pc.color, globVar.b_check, availMoves[i].option)
         # input("")
 
@@ -58,11 +85,23 @@ def mark_invalid_moves(availMoves, pc):
     return availMoves
 
 def checkWin():
-    w_won = False
-    b_won = False
+    won = False
 
+    if globVar.p_w_Num == 0:
+        Canvas.clear()
+        won = True
+        print("\n CHECKMATE!\n Black wins!")
+        print("\n\n Press Enter to exit.")
+        input("")
 
-    return True
+    elif globVar.p_b_Num == 0:
+        Canvas.clear()
+        won = True
+        print("\n CHECKMATE!\n White wins!")
+        print("\n\n Press Enter to exit.")
+        input("")
+
+    return won
 
 def check_king():
     found_b_check = False
@@ -110,12 +149,12 @@ def resetAvailMoves(availMoves):
 
 def un_resetAvailMoves(availMoves):
     for i in range(len(availMoves)):
-        if availMoves[i].option > -1:
-            optionRow = availMoves[i].row
-            optionCol = availMoves[i].col
-            board.Grid(optionRow,optionCol).des = True
-            # board.Grid(optionRow,optionCol).piece.selected = True
-            board.Grid(optionRow,optionCol).option = i + 1
+        # if availMoves[i].option > -1:
+        optionRow = availMoves[i].row
+        optionCol = availMoves[i].col
+        board.Grid(optionRow,optionCol).des = True
+        # board.Grid(optionRow,optionCol).piece.selected = True
+        board.Grid(optionRow,optionCol).option = i + 1
 
 def move(fromSqr, availMoves, choice):
     pc = copy.deepcopy(fromSqr.piece)
@@ -311,6 +350,8 @@ def writeSave():
     writePiecesArrays(save)
     # write deleted pieces arrays
     write_r_PiecesArrays(save)
+    # write potenial moves
+    write_p_moves(save)
 
     save.write("\n")
     save.close()
@@ -334,6 +375,10 @@ def readSave():
         # read deleted pieces
         read_r_PiecesArrays(save, "W")
         read_r_PiecesArrays(save, "b")
+        # read r_avail
+        read_r_avail(save)
+        # read p_moves
+        read_p_moves(save)
 
 def readBoard(save):
     board.populate()
@@ -432,6 +477,28 @@ def readGlobal(save):
     else:
         globVar.scanning = False
     globVar.r_avail_Num = int(save.readline().strip('\n'))
+    globVar.p_w_Num = int(save.readline().strip('\n'))
+    globVar.p_b_Num = int(save.readline().strip('\n'))
+    m_f_ps = save.readline().strip('\n')
+    if m_f_ps == "True":
+        globVar.m_f_ps = True
+    else:
+        globVar.m_f_ps = False
+    globVar.m_f_p_color = save.readline().strip('\n')
+    globVar.m_f_p_type = save.readline().strip('\n')
+    globVar.m_f_p_label = int(save.readline().strip('\n'))
+    globVar.m_f_p_row = int(save.readline().strip('\n'))
+    globVar.m_f_p_col = int(save.readline().strip('\n'))
+    m_t_ps = save.readline().strip('\n')
+    if m_t_ps == "True":
+        globVar.m_t_ps = True
+    else:
+        globVar.m_t_ps = False
+    globVar.m_t_p_color = save.readline().strip('\n')
+    globVar.m_t_p_type = save.readline().strip('\n')
+    globVar.m_t_p_label = int(save.readline().strip('\n'))
+    globVar.m_t_p_row = int(save.readline().strip('\n'))
+    globVar.m_t_p_col = int(save.readline().strip('\n'))
 
 def readPiecesArrays(save, c):
     wp_array = save.readline().split(',')
@@ -488,8 +555,6 @@ def readPiecesArrays(save, c):
 def read_r_avail(save):
     # read r_avail_array
     r_avail_array = save.readline().split(',')
-    print(r_avail_array)
-    input("")
     k = 0
     n = globVar.r_avail_Num
     for i in range(n):
@@ -512,20 +577,7 @@ def read_r_avail(save):
         col = int(r_avail_array[k])
         k += 1
 
-        if type == "none":
-            pc = pieces.Pawn("none", "none")
-        elif type == "pawn":
-            pc = pieces.Pawn(pcColor, type)
-        elif type == "rook":
-            pc = pieces.Rook(pcColor, type)
-        elif type == "bishop":
-            pc = pieces.Bishop(pcColor, type)
-        elif type == "queen":
-            pc = pieces.Queen(pcColor, type)
-        elif type == "king":
-            pc = pieces.King(pcColor, type)
-        elif type == "knight":
-            pc = pieces.Knight(pcColor, type)
+        pc = pieceConstructor(pcColor, type)
 
         pc.label = label
         pc.row = p_row
@@ -562,20 +614,7 @@ def read_r_PiecesArrays(save, c):
         col = int(wp_array[k])
         k += 1
 
-        if type == "none":
-            pc = pieces.Pawn("none", "none")
-        elif type == "pawn":
-            pc = pieces.Pawn(color, type)
-        elif type == "rook":
-            pc = pieces.Rook(color, type)
-        elif type == "bishop":
-            pc = pieces.Bishop(color, type)
-        elif type == "queen":
-            pc = pieces.Queen(color, type)
-        elif type == "king":
-            pc = pieces.King(color, type)
-        elif type == "knight":
-            pc = pieces.Knight(color, type)
+        pc = pieceConstructor(color, type)
 
         pc.selected = sl
         pc.label = label
@@ -586,6 +625,41 @@ def read_r_PiecesArrays(save, c):
             globVar.r_w_pieces.append(pc)
         else:
             globVar.r_b_pieces.append(pc)
+
+def read_p_moves(save):
+    # read white pieces
+    p_w_array = save.readline().split(',')
+    k = 0
+    n = globVar.r_avail_Num
+    for i in range(n):
+        ps = p_w_array[k]
+        k += 1
+        sqrColor = p_w_array[k]
+        k += 1
+        pcColor = p_w_array[k]
+        k += 1
+        type = p_w_array[k]
+        k += 1
+        label = int(p_w_array[k])
+        k += 1
+        p_row = int(p_w_array[k])
+        k += 1
+        p_col = int(p_w_array[k])
+        k += 1
+        row = int(p_w_array[k])
+        k += 1
+        col = int(p_w_array[k])
+        k += 1
+
+        pc = pieceConstructor(pcColor, type)
+
+        pc.label = label
+        pc.row = p_row
+        pc.col = p_col
+
+        sq = Square(ps, sqrColor, pc, row, col)
+
+        globVar.p_w_moves.append(sq)
 
 def writeBoard(save):
     for i in range(8):
@@ -650,6 +724,34 @@ def writeGlobal(save):
     save.write(str(globVar.scanning))
     save.write("\n")
     save.write(str(globVar.r_avail_Num))
+    save.write("\n")
+    save.write(str(globVar.p_w_Num))
+    save.write("\n")
+    save.write(str(globVar.p_b_Num))
+    save.write("\n")
+    save.write(str(globVar.m_f_ps))
+    save.write("\n")
+    save.write(str(globVar.m_f_p_color))
+    save.write("\n")
+    save.write(str(globVar.m_f_p_type))
+    save.write("\n")
+    save.write(str(globVar.m_f_p_label))
+    save.write("\n")
+    save.write(str(globVar.m_f_row))
+    save.write("\n")
+    save.write(str(globVar.m_f_col))
+    save.write("\n")
+    save.write(str(globVar.m_t_ps))
+    save.write("\n")
+    save.write(str(globVar.m_t_p_color))
+    save.write("\n")
+    save.write(str(globVar.m_t_p_type))
+    save.write("\n")
+    save.write(str(globVar.m_t_p_label))
+    save.write("\n")
+    save.write(str(globVar.m_t_row))
+    save.write("\n")
+    save.write(str(globVar.m_t_col))
     save.write("\n")
 
 def writePiecesArrays(save):
@@ -745,6 +847,53 @@ def write_r_PiecesArrays(save):
 
     save.write("\n")
 
+def write_p_moves(save):
+    # white potenial moves
+    for i in range(len(globVar.p_w_moves)):
+        save.write(str(globVar.p_w_moves[i].pieceStatus))
+        save.write(",")
+        save.write(str(globVar.p_w_moves[i].color))
+        save.write(",")
+        save.write(str(globVar.p_w_moves[i].piece.color))
+        save.write(",")
+        save.write(str(globVar.p_w_moves[i].piece.type))
+        save.write(",")
+        save.write(str(globVar.p_w_moves[i].piece.label))
+        save.write(",")
+        save.write(str(globVar.p_w_moves[i].piece.row))
+        save.write(",")
+        save.write(str(globVar.p_w_moves[i].piece.col))
+        save.write(",")
+        save.write(str(globVar.p_w_moves[i].row))
+        save.write(",")
+        save.write(str(globVar.p_w_moves[i].col))
+        save.write(",")
+
+    save.write("\n")
+
+    # black potenial moves
+    for i in range(len(globVar.p_b_moves)):
+        save.write(str(globVar.p_b_moves[i].pieceStatus))
+        save.write(",")
+        save.write(str(globVar.p_b_moves[i].color))
+        save.write(",")
+        save.write(str(globVar.p_b_moves[i].piece.color))
+        save.write(",")
+        save.write(str(globVar.p_b_moves[i].piece.type))
+        save.write(",")
+        save.write(str(globVar.p_b_moves[i].piece.label))
+        save.write(",")
+        save.write(str(globVar.p_b_moves[i].piece.row))
+        save.write(",")
+        save.write(str(globVar.p_b_moves[i].piece.col))
+        save.write(",")
+        save.write(str(globVar.p_b_moves[i].row))
+        save.write(",")
+        save.write(str(globVar.p_b_moves[i].col))
+        save.write(",")
+
+    save.write("\n")
+
 def clearSave():
     save = open("chess.save","w+")
     save.close()
@@ -760,91 +909,43 @@ def hasMoves(availMoves):
         return False
 
 def recordMove(fromSqr, toSqr):
-    file = open("moves.save", "w+")
-
-    file.write("FROM:\n")
-    file.write(str(fromSqr.pieceStatus))
-    file.write(str("\n"))
-    file.write(str(fromSqr.piece.color))
-    file.write(str("\n"))
-    file.write(str(fromSqr.piece.type))
-    file.write(str("\n"))
-    file.write(str(fromSqr.piece.label))
-    file.write(str("\n"))
-    file.write(str(fromSqr.row))
-    file.write(str("\n"))
-    file.write(str(fromSqr.col))
-    file.write(str("\n"))
-
-    file.write("TO:\n")
-    file.write(str(toSqr.pieceStatus))
-    file.write(str("\n"))
-    file.write(str(toSqr.piece.color))
-    file.write(str("\n"))
-    file.write(str(toSqr.piece.type))
-    file.write(str("\n"))
-    file.write(str(toSqr.piece.label))
-    file.write(str("\n"))
-    file.write(str(toSqr.row))
-    file.write(str("\n"))
-    file.write(str(toSqr.col))
-    file.write(str("\n"))
-
-    file.write("##########\n")
+    # record fromSqr
+    globVar.m_f_ps = fromSqr.pieceStatus
+    globVar.m_f_p_color = fromSqr.piece.color
+    globVar.m_f_p_type = fromSqr.piece.type
+    globVar.m_f_p_label = fromSqr.piece.label
+    globVar.m_f_row = fromSqr.row
+    globVar.m_f_col = fromSqr.col
+    # record toSqr
+    globVar.m_t_ps = toSqr.pieceStatus
+    globVar.m_t_p_color = toSqr.piece.color
+    globVar.m_t_p_type = toSqr.piece.type
+    globVar.m_t_p_label = toSqr.piece.label
+    globVar.m_t_row = toSqr.row
+    globVar.m_t_col = toSqr.col
 
 def undoMove():
-    file = open("moves.save", "r")
-
     # read and build fpc
-    tmp = file.readline().strip('\n')
-    fSqr_status = file.readline().strip('\n')
-    f_clr = file.readline().strip('\n')
-    f_type = file.readline().strip('\n')
-    f_label = int(file.readline().strip('\n'))
-    f_row = int(file.readline().strip('\n'))
-    f_col = int(file.readline().strip('\n'))
-    if f_type == "none":
-        fpc = pieces.Pawn("none", "none")
-    elif f_type == "pawn":
-        fpc = pieces.Pawn(f_clr, f_type)
-    elif f_type == "rook":
-        fpc = pieces.Rook(f_clr, f_type)
-    elif f_type == "bishop":
-        fpc = pieces.Bishop(f_clr, f_type)
-    elif f_type == "queen":
-        fpc = pieces.Queen(f_clr, f_type)
-    elif f_type == "king":
-        fpc = pieces.King(f_clr, f_type)
-    elif f_type == "knight":
-        fpc = pieces.Knight(f_clr, f_type)
+    fSqr_status = globVar.m_f_ps
+    f_clr = globVar.m_f_p_color
+    f_type = globVar.m_f_p_type
+    f_label = globVar.m_f_p_label
+    f_row = globVar.m_f_row
+    f_col = globVar.m_f_col
+    fpc = pieceConstructor(f_clr, f_type)
 
     fpc.label = f_label
     fpc.row = f_row
     fpc.col = f_col
 
     # read and build tpc
-    tmp = file.readline().strip('\n')
-    tSqr_status = file.readline().strip('\n')
-    t_clr = file.readline().strip('\n')
-    t_type = file.readline().strip('\n')
-    t_label = int(file.readline().strip('\n'))
-    t_row = int(file.readline().strip('\n'))
-    t_col = int(file.readline().strip('\n'))
-    tmp = file.readline().strip('\n')
-    if t_type == "none":
-        tpc = pieces.Pawn("none", "none")
-    elif t_type == "pawn":
-        tpc = pieces.Pawn(t_clr, t_type)
-    elif t_type == "rook":
-        tpc = pieces.Rook(t_clr, t_type)
-    elif t_type == "bishop":
-        tpc = pieces.Bishop(t_clr, t_type)
-    elif t_type == "queen":
-        tpc = pieces.Queen(t_clr, t_type)
-    elif t_type == "king":
-        tpc = pieces.King(t_clr, t_type)
-    elif t_type == "knight":
-        tpc = pieces.Knight(t_clr, t_type)
+    tSqr_status = globVar.m_t_ps
+    t_clr = globVar.m_t_p_color
+    t_type = globVar.m_t_p_type
+    t_label = globVar.m_t_p_label
+    t_row = globVar.m_t_row
+    t_col = globVar.m_t_col
+    tpc = pieceConstructor(t_clr, t_type)
 
     tpc.label = t_label
     tpc.row = t_row
@@ -855,15 +956,8 @@ def undoMove():
     board.uGrid(tpc)
     updatePieces(fpc)
 
-    if fSqr_status == "True":
-        board.Grid(fpc.row, fpc.col).pieceStatus = True
-    else:
-        board.Grid(fpc.row, fpc.col).pieceStatus = False
-
-    if tSqr_status == "True":
-        board.Grid(tpc.row, tpc.col).pieceStatus = True
-    else:
-        board.Grid(tpc.row, tpc.col).pieceStatus = False
+    board.Grid(fpc.row, fpc.col).pieceStatus = fSqr_status
+    board.Grid(tpc.row, tpc.col).pieceStatus = tSqr_status
 
     # reset des
     board.Grid(fpc.row, fpc.col).des = False
@@ -875,3 +969,35 @@ def undoMove():
 
     un_deletePiece(fpc)
     globVar.removed = False
+    board.Grid(fpc.row, fpc.col).piece.selected = True
+
+def pieceConstructor(clr, type):
+    if type == "none":
+        pc = pieces.Pawn("none", "none")
+    elif type == "pawn":
+        pc = pieces.Pawn(clr, type)
+    elif type == "rook":
+        pc = pieces.Rook(clr, type)
+    elif type == "bishop":
+        pc = pieces.Bishop(clr, type)
+    elif type == "queen":
+        pc = pieces.Queen(clr, type)
+    elif type == "king":
+        pc = pieces.King(clr, type)
+    elif type == "knight":
+        pc = pieces.Knight(clr, type)
+    return pc
+
+def typeCounter(type, color):
+    n = 0
+    if color == "W":
+        for i in range(len(globVar.w_pieces)):
+            if globVar.w_pieces[i].type == type:
+                n += 1
+
+    else:
+        for i in range(len(globVar.b_pieces)):
+            if globVar.b_pieces[i].type == type:
+                n += 1
+
+    return n

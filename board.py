@@ -133,9 +133,7 @@ def Grid(row, col):
     return grid[row][col]
 
 def resetGlobal():
-    globVar.numPlayers = -1
     globVar.player = "W"
-    globVar.noPlayers = False
     globVar.playerCount = 0
     globVar.w_NumPieces = 16
     globVar.b_NumPieces = 16
@@ -153,6 +151,10 @@ def resetGlobal():
     globVar.r_w_pieces = [pieces.Pawn("none", "none")]
     globVar.r_b_pieces = [pieces.Pawn("none", "none")]
     globVar.r_avail = [Square(False, "none", pieces.Pawn("none","none"), -1, -1)]
+    globVar.p_w_Moves = []
+    globVar.p_b_Moves = []
+    globVar.p_w_Num = -1
+    globVar.p_b_Num = -1
 
 # update grid with toSqr
 def uGrid(pc):

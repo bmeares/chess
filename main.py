@@ -35,8 +35,8 @@ def state():
 
         Player.turn()
         globVar.playerCount += 1
-        utils.check_king()
-        playing = utils.checkWin()
+        # utils.check_king()
+        playing = not utils.checkWin()
         utils.clearSave()
         utils.writeSave()
 

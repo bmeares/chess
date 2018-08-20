@@ -1,8 +1,9 @@
 import pieces
 import platform
 
-a_block = str(chr(219) + chr(219))
+# a_block = str(chr(219) + chr(219))
 u_block = u'\u2588\u2588'
+a_block = u'\u2588\u2588'
 
 class Square:
     """
