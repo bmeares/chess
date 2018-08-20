@@ -56,6 +56,25 @@ def nowPlaying():
     for i in range(23):
         print("-",end="")
 
+def pawn_to_new():
+    drawBoard()
+    while True:
+        try:
+            print(" 1. Rook    2. Knight")
+            print(" 3. Bishop  4. Queen")
+            choice = input("\n Choose a new piece: ")
+            choices(choice)
+        except ValueError:
+            pawnError()
+            continue
+        if (choice == "" or len(choice) > 1 or not choice.isdigit()
+        or int(choice) < 1 or int(choice) > 4):
+            pawnError()
+            continue
+        else:
+            break
+    return int(choice)
+
 def remaining():
     w_pawn_count = utils.typeCounter("pawn", "W")
     w_rook_count = utils.typeCounter("rook", "W")
@@ -137,6 +156,11 @@ def getouttacheckMessage():
 def pickValidMoveMessage():
     errorSeparator()
     print("\n Please pick a valid move.")
+    pressEnter()
+
+def pawnError():
+    errorSeparator()
+    print("\n Please pick a valid piece.")
     pressEnter()
 
 def pressEnter():

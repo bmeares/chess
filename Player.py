@@ -34,12 +34,14 @@ def ai_turn():
         time.sleep(0.5)
 
     while runagain:
+        utils.clearAllOptions()
         if globVar.player == "W":
             rand_pc = random.choice(globVar.w_pieces)
         else:
             rand_pc = random.choice(globVar.b_pieces)
 
         fromSqr = board.Grid(rand_pc.row, rand_pc.col)
+        fpc = copy.deepcopy(fromSqr.piece)
         availMoves = fromSqr.piece.scan()
         globVar.r_avail = copy.deepcopy(availMoves)
         globVar.r_avail_Num = len(globVar.r_avail)
@@ -53,21 +55,25 @@ def ai_turn():
             Canvas.drawBoard()
 
     utils.un_resetAvailMoves(availMoves)
-
     choice = randChoose(len(availMoves))
+    utils.record_user_move(fpc, availMoves, choice)
     pc = utils.move(fromSqr, availMoves, choice)
     # Check for check
     utils.check_king()
     # revert back if still in check
     if ((globVar.w_check and globVar.player == "W") or
     (globVar.b_check and globVar.player == "b")):
-        utils.undoMove()
+        # utils.undoMove()
+        utils.undo_user_move()
         ai_turn()
+    utils.check_pawn(pc)
 
 def human_turn():
     runagain = True
     while runagain:
+        utils.clearAllOptions()
         fromSqr = select()
+        fpc = copy.deepcopy(fromSqr.piece)
         availMoves = fromSqr.piece.scan()
         globVar.r_avail = copy.deepcopy(availMoves)
         globVar.r_avail_Num = len(globVar.r_avail)
@@ -85,6 +91,7 @@ def human_turn():
 
     utils.un_resetAvailMoves(availMoves)
     choice = choose(availMoves)
+    utils.record_user_move(fpc, availMoves, choice)
     pc = utils.move(fromSqr, availMoves, choice)
 
     # Check for check
@@ -93,8 +100,11 @@ def human_turn():
     if ((globVar.w_check and globVar.player == "W") or
     (globVar.b_check and globVar.player == "b")):
         Canvas.getouttacheckMessage()
-        utils.undoMove()
-        two_player_turn()
+        utils.undo_user_move()
+        # utils.undoMove()
+        human_turn()
+
+    utils.check_pawn(pc)
 
 def select():
     print(" Select which piece to move.")

@@ -65,6 +65,7 @@ def populate():
 
     for i in range(8):
         Grid(1,i).piece = pieces.Pawn(plr, "pawn")
+        Grid(i,i).piece.firstMove = True
 
     # set pieceStatus and piece_ID for black pieces
     piece_ID = 0
@@ -88,6 +89,7 @@ def populate():
 
     for i in range(8):
         Grid(6,i).piece = pieces.Pawn(plr, "pawn")
+        Grid(6,i).piece.firstMove = True
 
     # set pieceStatus and assign ID to white pieces
     place = 6
