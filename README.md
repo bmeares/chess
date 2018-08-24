@@ -1,8 +1,7 @@
 # Chess
 This is a text-based version of Chess written in Python.
 
-***How to run***
-    python3 main.py
+Use `python3 main.py` to run.
 
 **Features:**
 - Autosaves your progress
