@@ -46,11 +46,9 @@ class Square:
         else:
             if self.color == "black":
                 if platform.system() == "Windows":
-                    print(a_block.encode('utf-8'),end="")
-                    # return str(a_block.encode('utf-8'))
+                    return a_block
                 else:
-                    # return str(u_block.encode('utf-8'))
-                    print(u_block.encode('utf-8'),end="")
+                    return u_block
             elif self.color == "white":
                 return "  "
 
