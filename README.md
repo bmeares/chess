@@ -8,6 +8,7 @@ This is a text-based version of Chess written in Python.
 - Easy to navigate input
 - Displays the remaining number of pieces on the board
 - Exchange pawns for other pieces when reaching the other side of the board
+- 0, 1, or 2 player modes
 
 This project demonstrates inheritance by using six types of pieces, each with its own scan() function.
 The program tracks players' remaining moves and pieces and populates an array of potential moves after
