@@ -50,6 +50,8 @@ def nowPlaying():
     if( (globVar.w_check and globVar.player == "W") or
     (globVar.b_check and globVar.player == "b")):
         print("\n |       CHECK!    ", globVar.player, " |")
+    elif globVar.checkmate:
+        print("\n |      CHECKMATE!     |")
     else:
         print("\n |    NOW PLAYING: ", globVar.player, " |")
     print(" ",end="")

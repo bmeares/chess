@@ -11,6 +11,7 @@ from square import Square
 from pieces import Piece
 import pieces
 import random
+import os
 
 def check_pawn(pc):
     if (pc.type == "pawn" and (globVar.player == "W" and
@@ -62,9 +63,10 @@ def potenial_moves():
         globVar.r_avail = copy.deepcopy(am)
         am = mark_invalid_moves(am, fpc)
         globVar.p_w_moves.extend(am)
-        globVar.p_w_Num += len(am)
+        # globVar.p_w_Num += len(am)
         board.Grid(globVar.w_pieces[i].row, globVar.w_pieces[i].col).piece.selected = False
     un_resetAvailMoves(globVar.p_w_moves)
+    globVar.p_w_Num = len(globVar.p_w_moves)
 
     # populate p_b_Moves
     for i in range(len(globVar.b_pieces)):
@@ -74,19 +76,21 @@ def potenial_moves():
         am = mark_invalid_moves(am, fpc)
         am = remove_invalid_moves(am)
         globVar.p_b_moves.extend(am)
-        globVar.p_b_Num += len(am)
+        # globVar.p_b_Num += len(am)
         board.Grid(globVar.b_pieces[i].row, globVar.b_pieces[i].col).piece.selected = False
-    un_resetAvailMoves(globVar.p_b_Moves)
+    un_resetAvailMoves(globVar.p_b_moves)
+    globVar.p_b_Num = len(globVar.p_b_moves)
+    clearAllOptions()
 
 def remove_invalid_moves(availMoves):
     i = 0
     while i < len(availMoves):
         if globVar.r_avail[i].option == -2:
-            board.Grid(availMoves[i].row, availMoves[i].col).des = False
-            board.Grid(availMoves[i].row, availMoves[i].col).option = -2
+            # board.Grid(availMoves[i].row, availMoves[i].col).des = False
+            # board.Grid(availMoves[i].row, availMoves[i].col).option = -2
             availMoves.pop(i)
-
             globVar.r_avail.pop(i)
+            i -= 1
         i += 1
 
     return availMoves
@@ -118,26 +122,29 @@ def mark_invalid_moves(availMoves, pc):
 
 def checkWin():
     won = False
-
-    # print("p_w == {}".format(len(globVar.p_w_moves)))
-    # print("p_b == {}".format(len(globVar.p_b_moves)))
-    # input("")
+    potenial_moves()
 
     if (globVar.p_w_Num == 0 or len(globVar.p_w_moves) == 0 or
-    len(globVar.w_pieces) == 0):
-        Canvas.clear()
+    len(globVar.w_pieces) == 1 or globVar.no_w_king):
+        # Canvas.clear()
         won = True
-        print("\n CHECKMATE!\n Black wins!")
-        print("\n\n Press Enter to exit.")
+        globVar.checkmate = True
+        Canvas.drawBoard()
+        print(" Black wins!")
+        print("\n Press Enter to exit.")
         input("")
+        delete_save()
 
     elif (globVar.p_b_Num == 0 or len(globVar.p_b_moves) == 0 or
-    len(globVar.b_pieces) == 0):
-        Canvas.clear()
+    len(globVar.b_pieces) == 1 or globVar.no_b_king):
+        # Canvas.clear()
         won = True
-        print("\n CHECKMATE!\n White wins!")
-        print("\n\n Press Enter to exit.")
+        globVar.checkmate = True
+        Canvas.drawBoard()
+        print(" White wins!")
+        print("\n Press Enter to exit.")
         input("")
+        delete_save()
 
     return won
 
@@ -319,11 +326,15 @@ def deletePiece(tpc, fpc):
             globVar.b_pieces.pop(index)
             globVar.b_NumPieces -= 1
             globVar.r_b_NumPieces += 1
+            if tpc.type == "king":
+                globVar.no_b_king = True
         else:
             globVar.r_w_pieces.append(tpc)
             globVar.w_pieces.pop(index)
             globVar.w_NumPieces -= 1
             globVar.r_w_NumPieces += 1
+            if tpc.type == "king":
+                globVar.no_w_king = True
 
     # scan board and remove any pieces with same label and color
     remove_from_board(tpc.label, tpc.color)
@@ -337,12 +348,16 @@ def un_deletePiece(fpc):
             globVar.r_b_pieces.pop(index)
             globVar.b_NumPieces += 1
             globVar.r_b_NumPieces -= 1
+            if tmp_pc.type == "king":
+                globVar.no_b_king = False
         else:
             tmp_pc = copy.deepcopy(globVar.r_w_pieces[index])
             globVar.w_pieces.append(tmp_pc)
             globVar.r_w_pieces.pop(index)
             globVar.w_NumPieces += 1
             globVar.r_w_NumPieces -= 1
+            if tmp_pc.type == "king":
+                globVar.no_w_king = False
 
         # put piece back on board
         board.uGrid(tmp_pc)
@@ -390,6 +405,8 @@ def writeSave():
     write_r_PiecesArrays(save)
     # write potenial moves
     write_p_moves(save)
+    # write firstPawns
+    write_firstPawns(save)
 
     save.write("\n")
     save.close()
@@ -417,6 +434,8 @@ def readSave():
         read_r_avail(save)
         # read p_moves
         read_p_moves(save)
+        # read firstPawns
+        read_firstPawns(save)
 
 def readBoard(save):
     board.populate()
@@ -456,21 +475,8 @@ def readBoard(save):
             col = int(sqrArray[k])
             k += 1
 
-            if type == "none":
-                board.Grid(i,j).piece = pieces.Pawn(color, type)
-            elif(type == "pawn"):
-                board.Grid(i,j).piece = pieces.Pawn(color, type)
-            elif(type == "rook"):
-                board.Grid(i,j).piece = pieces.Rook(color, type)
-            elif(type == "bishop"):
-                board.Grid(i,j).piece = pieces.Bishop(color, type)
-            elif(type == "knight"):
-                board.Grid(i,j).piece = pieces.Knight(color, type)
-            elif(type == "queen"):
-                board.Grid(i,j).piece = pieces.Queen(color, type)
-            elif(type == "king"):
-                board.Grid(i,j).piece = pieces.King(color, type)
-
+            pc = pieceConstructor(color, type)
+            board.Grid(i,j).piece = pc
             board.Grid(i,j).piece.selected = selected
             board.Grid(i,j).piece.label = label
             board.Grid(i,j).piece.row = row
@@ -568,6 +574,17 @@ def readGlobal(save):
         globVar.u_m_fm = True
     else:
         globVar.u_m_fm = False
+    no_b_king = save.readline().strip('\n')
+    if no_b_king == "True":
+        globVar.no_b_king = True
+    else:
+        globVar.no_b_king = False
+    no_w_king = save.readline().strip('\n')
+    if no_w_king == "True":
+        globVar.no_w_king = True
+    else:
+        globVar.no_w_king = False
+    globVar.firstPawnsNum = int(save.readline().strip('\n'))
 
 def readPiecesArrays(save, c):
     wp_array = save.readline().split(',')
@@ -620,6 +637,50 @@ def readPiecesArrays(save, c):
             globVar.w_pieces.append(pc)
         else:
             globVar.b_pieces.append(pc)
+
+def read_firstPawns(save):
+    p_array = save.readline().split(',')
+    k = 0
+    n = globVar.firstPawnsNum
+    for i in range(n):
+        color = p_array[k]
+        k += 1
+        selected = p_array[k]
+        if selected == "True":
+            sl = True
+        else:
+            sl = False
+        k += 1
+        type = p_array[k]
+        k += 1
+        label = int(p_array[k])
+        k += 1
+        row = int(p_array[k])
+        k += 1
+        col = int(p_array[k])
+        k += 1
+        fm = p_array[k]
+        if fm == "True":
+            firstMove = True
+        else:
+            firstMove = False
+        k += 1
+
+        pc = pieces.Pawn(color, type)
+
+        pc.selected = sl
+        pc.label = label
+        pc.row = row
+        pc.col = col
+        pc.firstMove = firstMove
+
+        globVar.firstPawns.append(pc)
+        board.Grid(row, col).piece.firstMove = firstMove
+        index = findIndex(label, color)
+        if color == "W":
+            globVar.w_pieces[index].firstMove = True
+        else:
+            globVar.b_pieces[index].firstMove = True
 
 def read_r_avail(save):
     # read r_avail_array
@@ -699,7 +760,7 @@ def read_p_moves(save):
     # read white pieces
     p_w_array = save.readline().split(',')
     k = 0
-    n = globVar.r_avail_Num
+    n = globVar.p_w_Num
     for i in range(n):
         ps = p_w_array[k]
         k += 1
@@ -729,6 +790,40 @@ def read_p_moves(save):
         sq = Square(ps, sqrColor, pc, row, col)
 
         globVar.p_w_moves.append(sq)
+
+    # read black pieces
+    p_b_array = save.readline().split(',')
+    k = 0
+    n = globVar.p_b_Num
+    for i in range(n):
+        ps = p_b_array[k]
+        k += 1
+        sqrColor = p_b_array[k]
+        k += 1
+        pcColor = p_b_array[k]
+        k += 1
+        type = p_b_array[k]
+        k += 1
+        label = int(p_b_array[k])
+        k += 1
+        p_row = int(p_b_array[k])
+        k += 1
+        p_col = int(p_b_array[k])
+        k += 1
+        row = int(p_b_array[k])
+        k += 1
+        col = int(p_b_array[k])
+        k += 1
+
+        pc = pieceConstructor(pcColor, type)
+
+        pc.label = label
+        pc.row = p_row
+        pc.col = p_col
+
+        sq = Square(ps, sqrColor, pc, row, col)
+
+        globVar.p_b_moves.append(sq)
 
 def writeBoard(save):
     for i in range(8):
@@ -850,6 +945,12 @@ def writeGlobal(save):
     save.write("\n")
     save.write(str(globVar.u_m_fm))
     save.write("\n")
+    save.write(str(globVar.no_b_king))
+    save.write("\n")
+    save.write(str(globVar.no_w_king))
+    save.write("\n")
+    save.write(str(globVar.firstPawnsNum))
+    save.write("\n")
 
 def writePiecesArrays(save):
     # save w_pieces
@@ -944,6 +1045,25 @@ def write_r_PiecesArrays(save):
 
     save.write("\n")
 
+def write_firstPawns(save):
+    recordFirstPawns()
+    # save firstPawns
+    for i in range(len(globVar.firstPawns)):
+        save.write(str(globVar.firstPawns[i].color))
+        save.write(",")
+        save.write(str(globVar.firstPawns[i].selected))
+        save.write(",")
+        save.write(str(globVar.firstPawns[i].type))
+        save.write(",")
+        save.write(str(globVar.firstPawns[i].label))
+        save.write(",")
+        save.write(str(globVar.firstPawns[i].row))
+        save.write(",")
+        save.write(str(globVar.firstPawns[i].col))
+        save.write(",")
+        save.write(str(globVar.firstPawns[i].firstMove))
+        save.write(",")
+
 def write_p_moves(save):
     # white potenial moves
     for i in range(len(globVar.p_w_moves)):
@@ -994,6 +1114,9 @@ def write_p_moves(save):
 def clearSave():
     save = open("chess.save","w+")
     save.close()
+
+def delete_save():
+    os.remove("chess.save")
 
 def clearMovesHistory():
     file = open("moves.txt", "w+")
@@ -1193,3 +1316,13 @@ def typeCounter(type, color):
                 n += 1
 
     return n
+
+def recordFirstPawns():
+    globVar.firstPawnsNum = 0
+    globVar.firstPawns = []
+    for i in range(8):
+        for j in range(8):
+            if (board.Grid(i,j).piece.type == "pawn" and
+            board.Grid(i,j).piece.firstMove):
+                globVar.firstPawns.append(board.Grid(i,j).piece)
+    globVar.firstPawnsNum = len(globVar.firstPawns)

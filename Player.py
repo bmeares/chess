@@ -27,6 +27,7 @@ def turn():
         human_turn()
 
     globVar.removed = False
+    # utils.checkWin()
 
 def ai_turn():
     runagain = True

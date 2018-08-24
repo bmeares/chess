@@ -65,7 +65,7 @@ def populate():
 
     for i in range(8):
         Grid(1,i).piece = pieces.Pawn(plr, "pawn")
-        Grid(i,i).piece.firstMove = True
+        Grid(1,i).piece.firstMove = True
 
     # set pieceStatus and piece_ID for black pieces
     piece_ID = 0
