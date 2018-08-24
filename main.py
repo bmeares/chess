@@ -22,6 +22,8 @@ def main():
     while(running):
         running = state()
 
+    utils.delete_save()
+
 
 def state():
 

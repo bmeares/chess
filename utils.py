@@ -1112,7 +1112,7 @@ def write_p_moves(save):
     save.write("\n")
 
 def clearSave():
-    save = open("chess.save","w+")
+    save = open("chess.save","w")
     save.close()
 
 def delete_save():
