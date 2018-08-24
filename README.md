@@ -1,7 +1,7 @@
 # Chess
 This is a text-based version of Chess written in Python.
 
-*Features:*
+**Features:**
 - Autosaves your progress
 - Outputs each turn to a .txt file
 - Prevents players from entering check
@@ -15,10 +15,10 @@ each turn. Once the list of potential moves reaches zero, checkmate is called an
 
 The game is not 100% complete, although I have implemented and bugfixed extensively.
 
-*Bugs:*
+**Bugs:**
 - Sometimes does not detect check
 - Occasionally does not detect checkmate
 
-*To be implemented:*
+**To be implemented:**
 - Castling
 - Bugfixes
