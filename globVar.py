@@ -50,6 +50,7 @@ no_b_king = False
 no_w_king = False
 firstPawnsNum = 1
 checkmate = False
+slow_speed = False
 w_pieces = []
 b_pieces = []
 r_w_pieces = [pieces.Pawn("none", "none")]

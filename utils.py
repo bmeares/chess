@@ -66,7 +66,8 @@ def potenial_moves():
         globVar.p_w_moves.extend(am)
         # globVar.p_w_Num += len(am)
         board.Grid(globVar.w_pieces[i].row, globVar.w_pieces[i].col).piece.selected = False
-    un_resetAvailMoves(globVar.p_w_moves)
+    # un_resetAvailMoves(globVar.p_w_moves)
+    resetAvailMoves(globVar.p_w_moves)
     globVar.p_w_Num = len(globVar.p_w_moves)
 
     # populate p_b_Moves
@@ -80,7 +81,8 @@ def potenial_moves():
         globVar.p_b_moves.extend(am)
         # globVar.p_b_Num += len(am)
         board.Grid(globVar.b_pieces[i].row, globVar.b_pieces[i].col).piece.selected = False
-    un_resetAvailMoves(globVar.p_b_moves)
+    # un_resetAvailMoves(globVar.p_b_moves)
+    resetAvailMoves(globVar.p_b_moves)
     globVar.p_b_Num = len(globVar.p_b_moves)
     clearAllOptions()
 
@@ -108,7 +110,7 @@ def mark_invalid_moves(availMoves, pc):
         # undo move
         undoMove()
         pc.color = fpc.color
-        un_resetAvailMoves(am)
+        # un_resetAvailMoves(am)
 
         # if still in check, pop move from availMoves
         if ((pc.color == "W" and globVar.w_check) or
@@ -185,6 +187,7 @@ def check_king():
     if not found_b_check:
         globVar.b_check = False
     globVar.scanning = False
+    clearAllOptions()
 
 def resetAvailMoves(availMoves):
     for i in range(len(availMoves)):
@@ -232,39 +235,6 @@ def move(fromSqr, availMoves, choice):
         pc.firstMove = False
 
     return pc
-
-# def moveBack(fpc, tpc):
-#     from_pc = copy.deepcopy(fpc)
-#     from_pc.color = fpc.color
-#     from_pc.type = fpc.type
-#     print("from_pc.label ==", from_pc.label)
-#     print("from_pc.type ==", from_pc.type)
-#     print("from_pc.color ==", from_pc.color)
-#     print("from_pc.row ==", from_pc.row)
-#     print("from_pc.col ==", from_pc.col)
-#     input("")
-#
-#     to_pc = copy.deepcopy(tpc)
-#     to_pc.color = tpc.color
-#     to_pc.type = tpc.type
-#
-#     un_deletePiece(from_pc)
-#
-#     old_row = from_pc.row
-#     old_col = from_pc.col
-#     from_pc.row = to_pc.row
-#     from_pc.col = to_pc.col
-#     from_pc.selected = False
-#
-#     # update board with new piece
-#     board.uGrid(from_pc)
-#     updatePieces(from_pc)
-#
-#     #turn off piece for fromSqr
-#     if not globVar.removed:
-#         board.Grid(old_row,old_col).pieceStatus = False
-#         board.Grid(old_row,old_col).piece.color = "none"
-#     globVar.removed = False
 
 def updatePieces(pc):
     index = findIndex(pc.label, pc.color)
@@ -588,6 +558,16 @@ def readGlobal(save):
     else:
         globVar.no_w_king = False
     globVar.firstPawnsNum = int(save.readline().strip('\n'))
+    checkmate = save.readline().strip('\n')
+    if checkmate == "True":
+        globVar.checkmate = True
+    else:
+        globVar.checkmate = False
+    slow_speed = save.readline().strip('\n')
+    if slow_speed == "True":
+        globVar.slow_speed = True
+    else:
+        globVar.slow_speed = False
 
 def readPiecesArrays(save, c):
     wp_array = save.readline().split(',')
@@ -645,6 +625,7 @@ def read_firstPawns(save):
     p_array = save.readline().split(',')
     k = 0
     n = globVar.firstPawnsNum
+
     for i in range(n):
         color = p_array[k]
         k += 1
@@ -680,9 +661,10 @@ def read_firstPawns(save):
         globVar.firstPawns.append(pc)
         board.Grid(row, col).piece.firstMove = firstMove
         index = findIndex(label, color)
-        if color == "W":
+
+        if color == "W" and index != None:
             globVar.w_pieces[index].firstMove = True
-        else:
+        elif color == "b" and index != None:
             globVar.b_pieces[index].firstMove = True
 
 def read_r_avail(save):
@@ -693,8 +675,6 @@ def read_r_avail(save):
     for i in range(n):
         ps = r_avail_array[k]
         k += 1
-        print(k)
-        input("")
         sqrColor = r_avail_array[k]
         k += 1
         pcColor = r_avail_array[k]
@@ -956,6 +936,10 @@ def writeGlobal(save):
     save.write("\n")
     save.write(str(globVar.firstPawnsNum))
     save.write("\n")
+    save.write(str(globVar.checkmate))
+    save.write("\n")
+    save.write(str(globVar.slow_speed))
+    save.write("\n")
 
 def writePiecesArrays(save):
     # save w_pieces
@@ -1121,11 +1105,15 @@ def clearSave():
     save.close()
 
 def delete_save():
-    os.remove("chess.save")
+    if os.path.isfile("chess.save"):
+        os.remove("chess.save")
+    clearMovesHistory()
 
 def clearMovesHistory():
-    file = open("moves.txt", "w+")
-    file.close()
+    # file = open("moves.txt", "w")
+    # file.close()
+    if os.path.isfile("chess.save"):
+        os.remove("moves.txt")
 
 def hasMoves(availMoves):
     if len(availMoves) > 0:
@@ -1324,10 +1312,11 @@ def typeCounter(type, color):
 
 def recordFirstPawns():
     globVar.firstPawnsNum = 0
-    globVar.firstPawns = []
+    globVar.firstPawns = [pieces.Pawn("none", "none")]
     for i in range(8):
         for j in range(8):
             if (board.Grid(i,j).piece.type == "pawn" and
-            board.Grid(i,j).piece.firstMove):
+            board.Grid(i,j).piece.firstMove and
+            board.Grid(i,j).piece.color != "none"):
                 globVar.firstPawns.append(board.Grid(i,j).piece)
     globVar.firstPawnsNum = len(globVar.firstPawns)

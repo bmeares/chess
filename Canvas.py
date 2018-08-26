@@ -140,10 +140,46 @@ def startScreen():
         random.seed(a=None)
     if globVar.numPlayers == 0:
         globVar.noPlayers = True
+        speedMenu()
 
     board.populate()
 
     return True
+
+def speedMenu():
+    clear()
+    print("\n At what speed would you like the AI to play?")
+    print("\n 1. Slow enough to watch the game")
+    print(" 2. Full speed ahead")
+
+    while True:
+        try:
+            n = input("\n Option: ")
+        except ValueError:
+            print("\n Please choose an option.")
+            pressEnter()
+        if n.upper() == "Q":
+            quit()
+        elif n.upper() == "R":
+            board.populate()
+            clear()
+            print("\n The board has been reset.")
+            pressEnter()
+        elif n.upper() == "L":
+            utils.readSave()
+            clear()
+            print("\n The last save has been loaded.")
+            pressEnter()
+        elif (int(n) < 1) or (int(n) > 2) or not n.isdigit():
+            print("\n Please choose an option.")
+            pressEnter()
+            continue
+        else:
+            break
+    if int(n) == 1:
+        globVar.slow_speed = True
+    else:
+        globVar.slow_speed = False
 
 def chooseAvailableMessage():
     errorSeparator()
@@ -280,7 +316,7 @@ def quit():
     if y:
         utils.writeSave()
     else:
-        os.remove("chess.save")
+        utils.delete_save()
     sys.exit(0)
 
 def yesNo():

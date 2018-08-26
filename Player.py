@@ -13,8 +13,8 @@ import copy
 import time
 
 def turn():
-    Canvas.drawBoard()
     utils.potenial_moves()
+    Canvas.drawBoard()
 
     if (globVar.noPlayers or globVar.numPlayers == 0):
         ai_turn()
@@ -27,11 +27,10 @@ def turn():
         human_turn()
 
     globVar.removed = False
-    # utils.checkWin()
 
 def ai_turn():
     runagain = True
-    if globVar.numPlayers == 1:
+    if globVar.numPlayers == 1 or globVar.slow_speed:
         time.sleep(0.5)
 
     while runagain:
@@ -64,7 +63,6 @@ def ai_turn():
     # revert back if still in check
     if ((globVar.w_check and globVar.player == "W") or
     (globVar.b_check and globVar.player == "b")):
-        # utils.undoMove()
         utils.undo_user_move()
         ai_turn()
     utils.check_pawn(pc)
@@ -131,7 +129,7 @@ def choose(availMoves):
 
 def randChoose(a):
     Canvas.drawBoard()
-    if globVar.numPlayers == 1:
+    if globVar.numPlayers == 1 or globVar.slow_speed:
         time.sleep(0.5)
     choice = random.randint(0, 100) % a
     return choice

@@ -66,6 +66,7 @@ def populate():
     for i in range(8):
         Grid(1,i).piece = pieces.Pawn(plr, "pawn")
         Grid(1,i).piece.firstMove = True
+        globVar.firstPawns.append(Grid(1,i).piece)
 
     # set pieceStatus and piece_ID for black pieces
     piece_ID = 0
@@ -90,6 +91,7 @@ def populate():
     for i in range(8):
         Grid(6,i).piece = pieces.Pawn(plr, "pawn")
         Grid(6,i).piece.firstMove = True
+        globVar.firstPawns.append(Grid(6,i).piece)
 
     # set pieceStatus and assign ID to white pieces
     place = 6
@@ -126,9 +128,6 @@ def populate():
 
     # initialize global variables
     resetGlobal()
-
-    # reset moves history
-    utils.clearMovesHistory()
 
 # return reference to grid
 def Grid(row, col):
