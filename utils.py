@@ -61,6 +61,7 @@ def potenial_moves():
         fpc = globVar.w_pieces[i]
         am = fpc.scan()
         globVar.r_avail = copy.deepcopy(am)
+        globVar.r_avail_Num = len(am)
         am = mark_invalid_moves(am, fpc)
         globVar.p_w_moves.extend(am)
         # globVar.p_w_Num += len(am)
@@ -73,6 +74,7 @@ def potenial_moves():
         fpc = globVar.b_pieces[i]
         am = fpc.scan()
         globVar.r_avail = copy.deepcopy(am)
+        globVar.r_avail_Num = len(am)
         am = mark_invalid_moves(am, fpc)
         am = remove_invalid_moves(am)
         globVar.p_b_moves.extend(am)
@@ -90,6 +92,7 @@ def remove_invalid_moves(availMoves):
             # board.Grid(availMoves[i].row, availMoves[i].col).option = -2
             availMoves.pop(i)
             globVar.r_avail.pop(i)
+            globVar.r_avail_Num = len(globVar.r_avail)
             i -= 1
         i += 1
 
@@ -690,6 +693,8 @@ def read_r_avail(save):
     for i in range(n):
         ps = r_avail_array[k]
         k += 1
+        print(k)
+        input("")
         sqrColor = r_avail_array[k]
         k += 1
         pcColor = r_avail_array[k]
