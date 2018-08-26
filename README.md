@@ -1,7 +1,7 @@
 # Chess
 This is a text-based version of Chess written in Python.
 
-Use `python3 main.py` to run.
+Use `python3 main.py` to run, or run the .exe I compiled for Windows (check the releases tab).
 
 **Features:**
 - Autosaves your progress
