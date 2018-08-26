@@ -106,30 +106,22 @@ def remaining():
     print("\n")
 
 def startScreen():
-    clear()
-    print("\n Welcome to Chess: Python Edition!\n\n")
-
     while True:
         try:
+            clear()
+            print("\n Welcome to Chess: Python Edition!\n\n")
             n = input(" How many players for this game?\n (0, 1, or 2): ")
+
         except ValueError:
-            print("\n Please choose between 0 and 2.")
-            pressEnter()
-        if n.upper() == "Q":
-            quit()
-        elif n.upper() == "R":
-            board.populate()
-            clear()
-            print("\n The board has been reset.")
-            pressEnter()
-        elif n.upper() == "L":
-            utils.readSave()
-            clear()
-            print("\n The last save has been loaded.")
-            pressEnter()
-        elif (int(n) < 0) or (int(n) > 2) or not n.isdigit():
-            print("\n Please choose between 0 and 2.")
-            pressEnter()
+            print("\n Please choose an option.")
+            print("\n Press Enter to continue.")
+            input("")
+            continue
+
+        if (not n.isdigit()) or (int(n) < 0) or (int(n) > 2):
+            print("\n Please choose an option.")
+            print("\n Press Enter to continue.")
+            input("")
             continue
         else:
             break
@@ -147,35 +139,28 @@ def startScreen():
     return True
 
 def speedMenu():
-    clear()
-    print("\n At what speed would you like the AI to play?")
-    print("\n 1. Slow enough to watch the game")
-    print(" 2. Full speed ahead")
-
     while True:
         try:
+            clear()
+            print("\n At what speed would you like the AI to play?")
+            print("\n 1. Slow enough to watch the game")
+            print(" 2. Full speed ahead")
             n = input("\n Option: ")
+            choices(n)
         except ValueError:
             print("\n Please choose an option.")
-            pressEnter()
-        if n.upper() == "Q":
-            quit()
-        elif n.upper() == "R":
-            board.populate()
-            clear()
-            print("\n The board has been reset.")
-            pressEnter()
-        elif n.upper() == "L":
-            utils.readSave()
-            clear()
-            print("\n The last save has been loaded.")
-            pressEnter()
-        elif (int(n) < 1) or (int(n) > 2) or not n.isdigit():
+            print("\n Press Enter to continue.")
+            input("")
+            continue
+
+        if (not n.isdigit()) or (int(n) < 1) or (int(n) > 2):
             print("\n Please choose an option.")
-            pressEnter()
+            print("\n Press Enter to continue.")
+            input("")
             continue
         else:
             break
+
     if int(n) == 1:
         globVar.slow_speed = True
     else:
