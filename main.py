@@ -10,6 +10,7 @@ import board
 import Player
 import globVar
 import pathlib
+from save import *
 
 def main():
     path = pathlib.Path("chess.save")
@@ -40,7 +41,7 @@ def state():
         # utils.check_king()
         playing = not utils.checkWin()
         utils.clearSave()
-        utils.writeSave()
+        write.writeSave()
 
     return playing
 

@@ -10,6 +10,7 @@ import board
 import globVar
 import sys
 import utils
+from save import *
 
 def drawBoard():
     clear()
@@ -314,10 +315,9 @@ def yesNo():
 def loadSave():
     clear()
     print("\n Save detected. Load previous game? ", end="")
-    y = yesNo()
-    if y:
+    if yesNo():
         board.populate()
-        utils.readSave()
+        read.readSave()
     else:
         # board.populate()
         startScreen()
