@@ -188,6 +188,8 @@ def readGlobal(save):
         globVar.slow_speed = True
     else:
         globVar.slow_speed = False
+    unicode = save.readline().strip('\n')
+    globVar.unicode = (unicode == "True")
 
 def readPiecesArrays(save, c):
     wp_array = save.readline().split(',')

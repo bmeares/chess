@@ -1,15 +1,22 @@
 from pieces import Piece
 import board
+import globVar
 
 class Bishop(Piece):
     def __init__(self, color, type):
         Piece.__init__(self, color, type)
 
     def __str__(self):
-        if(self.color == "W"):
-            return "B"
+        if(globVar.unicode):
+            if(self.color == "W"):
+                return "\u2657"
+            else:
+                return "\u265D"
         else:
-            return "b"
+            if(self.color == "W"):
+                return "B"
+            else:
+                return "b"
 
     def scan(self):
         availMoves = []

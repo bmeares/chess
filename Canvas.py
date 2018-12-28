@@ -135,6 +135,8 @@ def startScreen():
         globVar.noPlayers = True
         speedMenu()
 
+    formatMenu()
+
     board.populate()
 
     return True
@@ -166,6 +168,37 @@ def speedMenu():
         globVar.slow_speed = True
     else:
         globVar.slow_speed = False
+
+def formatMenu():
+    while True:
+        try:
+            clear()
+            print("\n Text encoding: How do you want to format the game?")
+            print("\n 1. Plain ASCII")
+            print("    (e.g. Windows)")
+            print(" 2. Unicode + ANSI")
+            print("    (Mac / Linux)")
+
+            n = input("\n Option: ")
+            choices(n)
+        except ValueError:
+            print("\n Please choose an option.")
+            print("\n Press Enter to continue.")
+            input("")
+            continue
+
+        if (not n.isdigit()) or (int(n) < 1) or (int(n) > 2):
+            print("\n Please choose an option.")
+            print("\n Press Enter to continue.")
+            input("")
+            continue
+        else:
+            break
+
+    if int(n) == 1:
+        globVar.unicode = False
+    else:
+        globVar.unicode = True
 
 def chooseAvailableMessage():
     errorSeparator()

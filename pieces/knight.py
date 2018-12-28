@@ -1,15 +1,22 @@
 from pieces import Piece
 import board
+import globVar
 
 class Knight(Piece):
     def __init__(self, color, type):
         Piece.__init__(self, color, type)
 
     def __str__(self):
-        if(self.color == "W"):
-            return "N"
+        if(globVar.unicode):
+            if(self.color == "W"):
+                return "\u2658"
+            else:
+                return "\u265E"
         else:
-            return "n"
+            if(self.color == "W"):
+                return "N"
+            else:
+                return "n"
 
     def scan(self):
         availMoves = []

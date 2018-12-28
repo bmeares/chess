@@ -1,15 +1,22 @@
 from pieces import Piece
 import board
+import globVar
 
 class Queen(Piece):
     def __init__(self, color, type):
         Piece.__init__(self, color, type)
 
     def __str__(self):
-        if(self.color == "W"):
-            return "Q"
+        if(globVar.unicode):
+            if(self.color == "W"):
+                return "\u2655"
+            else:
+                return "\u265B"
         else:
-            return "q"
+            if(self.color == "W"):
+                return "Q"
+            else:
+                return "q"
 
     def scan(self):
         # rook code

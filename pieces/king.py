@@ -10,10 +10,16 @@ class King(Piece):
         Piece.__init__(self, color, type)
 
     def __str__(self):
-        if(self.color == "W"):
-            return "K"
+        if(globVar.unicode):
+            if(self.color == "W"):
+                return "\u2654"
+            else:
+                return "\u265A"
         else:
-            return "k"
+            if(self.color == "W"):
+                return "K"
+            else:
+                return "k"
 
     def scan(self):
         availMoves = []

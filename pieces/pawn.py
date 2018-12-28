@@ -7,12 +7,17 @@ class Pawn(Piece):
         Piece.__init__(self, color, type)
 
     def __str__(self):
-        if(self.color == "W"):
-            return "P"
-        elif self.color == "b":
-            return "p"
+        import globVar
+        if(globVar.unicode):
+            if(self.color == "W"):
+                return "\u2659"
+            else:
+                return "\u265F"
         else:
-            return ""
+            if(self.color == "W"):
+                return "P"
+            else:
+                return "p"
 
     def scan(self):
         # Determine direction

@@ -1,15 +1,22 @@
 from pieces import Piece
 import board
+import globVar
 
 class Rook(Piece):
     def __init__(self, color, type):
         Piece.__init__(self, color, type)
 
     def __str__(self):
-        if(self.color == "W"):
-            return "R"
+        if(globVar.unicode):
+            if(self.color == "W"):
+                return "\u2656"
+            else:
+                return "\u265C"
         else:
-            return "r"
+            if(self.color == "W"):
+                return "R"
+            else:
+                return "r"
 
     def scan(self):
         availMoves = []

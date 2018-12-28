@@ -1,9 +1,12 @@
 import pieces
 import platform
+import globVar
 
-# a_block = str(chr(219) + chr(219))
+# a_block = ""
+a_block = str(chr(219) + chr(219))
+a_block = str(a_block.encode('ascii', 'replace'))
 u_block = u'\u2588\u2588'
-a_block = u'\u2588\u2588'
+# a_block = u'\u2588\u2588'
 
 class Square:
     """
@@ -45,10 +48,14 @@ class Square:
 
         else:
             if self.color == "black":
-                if platform.system() == "Windows":
-                    return a_block
-                else:
+                if(globVar.unicode):
                     return u_block
+                else:
+                    return a_block
+                # if platform.system() == "Windows":
+                #     return a_block
+                # else:
+                #     return u_block
             elif self.color == "white":
                 return "  "
 
