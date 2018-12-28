@@ -1,12 +1,10 @@
 import pieces
 import platform
 import globVar
+import colors
 
-# a_block = ""
-a_block = str(chr(219) + chr(219))
-a_block = str(a_block.encode('ascii', 'replace'))
+a_block = "##"
 u_block = u'\u2588\u2588'
-# a_block = u'\u2588\u2588'
 
 class Square:
     """
@@ -26,37 +24,55 @@ class Square:
 
         global a_block
         global u_block
+        out = ""
 
         if self.des:
             if self.pieceStatus and self.option < 10:
-                print(self.piece, end = "")
+                out += str(self.piece)
+                # print(self.piece, end = "")
             elif self.option < 10:
-                print(" ",end="")
+                out += " "
+                # print(" ",end="")
+            out += str(self.option)
 
-            print(self.option, end="")
+            # print(self.option, end="")
 
         elif self.pieceStatus:
-
-            print(self.piece, end="")
+            out += str(self.piece)
+            # print(self.piece, end="")
             if self.piece.selected:
-                print("^",end="")
+                out += "^"
+                if globVar.unicode:
+                    out = colors.blink_ansi(out)
+                # return out
+                # print("^",end="")
             else:
                 if self.piece.color == "W":
-                    print("'", end="")
+                    out += "'"
+                    # print("'", end="")
                 elif self.piece.color == "b":
-                    print(".", end="")
+                    out += "."
+                    # print(".", end="")
 
         else:
-            if self.color == "black":
-                if(globVar.unicode):
-                    return u_block
-                else:
-                    return a_block
-                # if platform.system() == "Windows":
-                #     return a_block
-                # else:
-                #     return u_block
-            elif self.color == "white":
-                return "  "
+            out += "  "
+            if not globVar.unicode and self.color == "black":
+                out = a_block
+            # if self.color == "black":
+            #     if(globVar.unicode):
+            #         return colors.bg_ansi("  ", "black")
+            #         # return u_block
+            #     else:
+            #         return a_block
+            #     # if platform.system() == "Windows":
+            #     #     return a_block
+            #     # else:
+            #     #     return u_block
+            # elif self.color == "white":
+            #     return colors.bg_ansi("  ", "white")
 
-        return ""
+        if self.color == "black" and globVar.unicode:
+            out = colors.bg_ansi(out, "black")
+        elif globVar.unicode:
+            out = colors.bg_ansi(out, "white")
+        return out

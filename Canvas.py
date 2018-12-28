@@ -10,13 +10,20 @@ import board
 import globVar
 import sys
 import utils
+import colors
 from save import *
 
 def drawBoard():
+    if globVar.unicode:
+        drawBoard_unicode()
+    else:
+        drawBoard_ascii()
+
+    remaining()
+
+def drawBoard_ascii():
     clear()
-
-    nowPlaying()
-
+    nowPlaying_ascii()
     numLabel = 8
     letterLabel = 'A'
 
@@ -39,12 +46,46 @@ def drawBoard():
         print("\n", end = "")
     print("    ",end="")
     for i in range(18):
-        print("¯",end="")
+        print("-",end="")
     print("\n",end="")
 
-    remaining()
+
+def drawBoard_unicode():
+    clear()
+    out = nowPlaying_unicode()
+
+    numLabel = 8
+    letterLabel = 'A'
+    out += "\n     "
+    for i in range(8):
+        out += str(letterLabel + " ")
+        letterLabel = chr(ord(letterLabel) + 1)
+
+    out += "\n    "
+    # for i in range(18):
+    #     out += "_"
+    out += "\n"
+    for i in range(8):
+        out += '  {}  '.format(numLabel)
+        for j in range(8):
+            out += str(board.Grid(i, j))
+        # out += "|"
+        numLabel -= 1
+        out += "\n"
+    # out += "    "
+    # for i in range(18):
+    #     out += "¯"
+    out += "\n"
+    print(out, end = "")
+    # print(colors.inverse_ansi(out), end = "")
 
 def nowPlaying():
+    if globVar.unicode:
+        nowPlaying_unicode()
+    else:
+        nowPlaying_ascii()
+
+def nowPlaying_ascii():
     print(" ",end="")
     for i in range(23):
         print("-",end="")
@@ -58,6 +99,32 @@ def nowPlaying():
     print(" ",end="")
     for i in range(23):
         print("-",end="")
+
+def nowPlaying_unicode():
+    out = ""
+    out += " "
+    p = ""
+    if globVar.player == "W":
+        p += "♔"
+    elif globVar.player == "b":
+        p += "♚"
+
+    out += "╔"
+    for i in range(21):
+        out += "═"
+    out += "╗"
+    if( (globVar.w_check and globVar.player == "W") or
+    (globVar.b_check and globVar.player == "b")):
+        out += "\n ║       CHECK!    " + p + " ║  \n"
+    elif globVar.checkmate:
+        out += "\n ║      CHECKMATE!     ║\n"
+    else:
+        out += "\n ║" + colors.BOLD  +  "    NOW PLAYING:  " + p + colors.RESET + "  ║  \n"
+    out += " ╚"
+    for i in range(21):
+        out += "═"
+    out += "╝"
+    return out
 
 def pawn_to_new():
     drawBoard()
@@ -79,6 +146,12 @@ def pawn_to_new():
     return int(choice)
 
 def remaining():
+    if globVar.unicode:
+        remaining_unicode()
+    else:
+        remaining_ascii()
+
+def remaining_ascii():
     w_pawn_count = utils.typeCounter("pawn", "W")
     w_rook_count = utils.typeCounter("rook", "W")
     w_knight_count = utils.typeCounter("knight", "W")
@@ -95,7 +168,7 @@ def remaining():
     print(" ",end="")
     print("       REMAINING:\n ", end="")
     for i in range(23):
-        print("_",end="")
+        print("-",end="")
     print("\n   White:   |   Black:")
     print("  {}P'  {}R'  |  {}p.  {}r.".format(w_pawn_count, w_rook_count, b_pawn_count, b_rook_count))
     print("  {}N'  {}B'  |  {}n.  {}b.".format(w_knight_count, w_bishop_count, b_knight_count, b_bishop_count))
@@ -103,8 +176,41 @@ def remaining():
 
     print(" ",end="")
     for i in range(23):
-        print("¯",end="")
+        print("-",end="")
     print("\n")
+
+def remaining_unicode():
+    w_pawn_count = utils.typeCounter("pawn", "W")
+    w_rook_count = utils.typeCounter("rook", "W")
+    w_knight_count = utils.typeCounter("knight", "W")
+    w_bishop_count = utils.typeCounter("bishop", "W")
+    w_queen_count = utils.typeCounter("queen", "W")
+    w_king_count = utils.typeCounter("king", "W")
+    b_pawn_count = utils.typeCounter("pawn", "b")
+    b_rook_count = utils.typeCounter("rook", "b")
+    b_knight_count = utils.typeCounter("knight", "b")
+    b_bishop_count = utils.typeCounter("bishop", "b")
+    b_queen_count = utils.typeCounter("queen", "b")
+    b_king_count = utils.typeCounter("king", "b")
+
+    # print(" ",end="")
+    print("        REMAINING:", end="")
+    # for i in range(23):
+    #     print("_",end="")
+    print("\n ", end = "")
+    print(colors.bg_ansi("  White:   ", "white"), end = "")
+    print(colors.bg_ansi("│", "grey"), end = "")
+    print(colors.bg_ansi("   Black:  ", "black"), end = "")
+    print("\n", end = "")
+
+    print("  {} ♙  {} ♖  │  {} ♟  {} ♜".format(w_pawn_count, w_rook_count, b_pawn_count, b_rook_count))
+    print("  {} ♘  {} ♗  │  {} ♞  {} ♝".format(w_knight_count, w_bishop_count, b_knight_count, b_bishop_count))
+    print("  {} ♕  {} ♔  │  {} ♛  {} ♚".format(w_queen_count, w_king_count, b_queen_count, b_king_count))
+
+    # print(" ",end="")
+    # for i in range(23):
+    #     print("¯",end="")
+    print("\n", end = "")
 
 def startScreen():
     while True:
@@ -173,11 +279,11 @@ def formatMenu():
     while True:
         try:
             clear()
-            print("\n Text encoding: How do you want to format the game?")
-            print("\n 1. Plain ASCII")
-            print("    (e.g. Windows)")
-            print(" 2. Unicode + ANSI")
-            print("    (Mac / Linux)")
+            print("\n How do you want the game to look?")
+            print("\n 1. Fancy")
+            print("    (some graphics via Unicode / ANSI trickery")
+            print("\n 2. Classic")
+            print("    (all ASCII, i.e. use for old school Windows cmd)")
 
             n = input("\n Option: ")
             choices(n)
@@ -195,10 +301,7 @@ def formatMenu():
         else:
             break
 
-    if int(n) == 1:
-        globVar.unicode = False
-    else:
-        globVar.unicode = True
+    globVar.unicode = (int(n) == 1)
 
 def chooseAvailableMessage():
     errorSeparator()
@@ -248,7 +351,7 @@ def errorSeparator():
 def clear():
     if platform.system() == "Linux":
         os.system("clear")
-    if platform.system() == "Darwin":
+    elif platform.system() == "Darwin":
         os.system("clear")
     elif platform.system() == "Windows":
         os.system("CLS")
