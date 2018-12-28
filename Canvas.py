@@ -115,11 +115,11 @@ def nowPlaying_unicode():
     out += "╗"
     if( (globVar.w_check and globVar.player == "W") or
     (globVar.b_check and globVar.player == "b")):
-        out += "\n ║       CHECK!    " + p + " ║  \n"
+        out += "\n ║" + colors.BOLD + "       CHECK!    " + p + colors.RESET + "   ║  \n"
     elif globVar.checkmate:
-        out += "\n ║      CHECKMATE!     ║\n"
+        out += "\n ║" + colors.BOLD + "      CHECKMATE!     " + colors.RESET + "║\n"
     else:
-        out += "\n ║" + colors.BOLD  +  "    NOW PLAYING:  " + p + colors.RESET + "  ║  \n"
+        out += "\n ║" + colors.BOLD + "    NOW PLAYING:  " + p + colors.RESET + "  ║  \n"
     out += " ╚"
     for i in range(21):
         out += "═"
