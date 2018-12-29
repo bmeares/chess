@@ -1,6 +1,7 @@
 from pieces import Piece
 import board
 import globVar
+import colors
 
 class Queen(Piece):
     def __init__(self, color, type):
@@ -9,9 +10,9 @@ class Queen(Piece):
     def __str__(self):
         if(globVar.unicode):
             if(self.color == "W"):
-                return "\u2655"
+                return colors.w_queen
             else:
-                return "\u265B"
+                return colors.b_queen
         else:
             if(self.color == "W"):
                 return "Q"

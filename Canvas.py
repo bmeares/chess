@@ -52,30 +52,33 @@ def drawBoard_ascii():
 
 def drawBoard_unicode():
     clear()
-    out = nowPlaying_unicode()
+    out = ""
+    out_1 = nowPlaying_unicode()
+    out_2 = ""
 
     numLabel = 8
     letterLabel = 'A'
-    out += "\n     "
+    out_2 += colors.normal("\n     ")
     for i in range(8):
-        out += str(letterLabel + " ")
+        out_2 += colors.normal(str(letterLabel + " "))
         letterLabel = chr(ord(letterLabel) + 1)
 
-    out += "\n    "
+    out_2 += "    \n    "
+    for i in range(21):
+        out_2 += " "
     # for i in range(18):
     #     out += "_"
-    out += "\n"
+    out_2 += "\n"
     for i in range(8):
-        out += '  {}  '.format(numLabel)
+        out_2 += '  {}  '.format(numLabel)
         for j in range(8):
-            out += str(board.Grid(i, j))
-        # out += "|"
+            out_2 += colors.normal(str(board.Grid(i, j)))
         numLabel -= 1
-        out += "\n"
-    # out += "    "
-    # for i in range(18):
-    #     out += "¯"
-    out += "\n"
+        out_2 += colors.RESET + colors.normal("    \n")
+    for i in range(25):
+        out_2 += colors.normal(" ")
+    out_2 += colors.normal("\n")
+    out = out_1 + out_2 + colors.RESET
     print(out, end = "")
     # print(colors.inverse_ansi(out), end = "")
 
@@ -102,29 +105,36 @@ def nowPlaying_ascii():
 
 def nowPlaying_unicode():
     out = ""
-    out += " "
+    out_1 = ""
+    out_1 += " "
+    out_2 = ""
     p = ""
     if globVar.player == "W":
-        p += "♔"
+        p += colors.w_king
     elif globVar.player == "b":
-        p += "♚"
+        p += colors.b_king
 
-    out += "╔"
+    out_1 += "╔"
     for i in range(21):
-        out += "═"
-    out += "╗"
+        out_1 += "═"
+    out_1 += "╗ "
     if( (globVar.w_check and globVar.player == "W") or
     (globVar.b_check and globVar.player == "b")):
-        out += "\n ║" + colors.BOLD + "       CHECK!    " + p + colors.RESET + "   ║  \n"
+        out_1 += "\n ║" + "       CHECK!    " + p
+        out_2 += "   ║ \n"
     elif globVar.checkmate:
-        out += "\n ║" + colors.BOLD + "      CHECKMATE!     " + colors.RESET + "║\n"
+        out_1 += "\n ║" + "      CHECKMATE!     "
+        out_2 += "║ \n"
     else:
-        out += "\n ║" + colors.BOLD + "    NOW PLAYING:  " + p + colors.RESET + "  ║  \n"
-    out += " ╚"
+        out_1 += "\n ║" + "    NOW PLAYING:  " + p
+        out_2 += "  ║ \n"
+    out_2 += " ╚"
     for i in range(21):
-        out += "═"
-    out += "╝"
-    return out
+        out_2 += "═"
+    out_2 += "╝ "
+    out = colors.normal(out_1) + colors.normal(out_2)
+    # out = colors.colors_ansi(colors.Pale_yellow, colors.Dark_red, out_1) + colors.colors_ansi(colors.Pale_yellow, colors.Dark_red, out_2)
+    return out + colors.RESET
 
 def pawn_to_new():
     drawBoard()
@@ -193,36 +203,109 @@ def remaining_unicode():
     b_queen_count = utils.typeCounter("queen", "b")
     b_king_count = utils.typeCounter("king", "b")
 
-    # print(" ",end="")
-    print("        REMAINING:", end="")
-    # for i in range(23):
-    #     print("_",end="")
-    print("\n ", end = "")
-    print(colors.bg_ansi("  White:   ", "white"), end = "")
-    print(colors.bg_ansi("│", "grey"), end = "")
-    print(colors.bg_ansi("   Black:  ", "black"), end = "")
-    print("\n", end = "")
+    out = ""
+    temp_out = ""
 
-    print("  {} ♙  {} ♖  │  {} ♟  {} ♜".format(w_pawn_count, w_rook_count, b_pawn_count, b_rook_count))
-    print("  {} ♘  {} ♗  │  {} ♞  {} ♝".format(w_knight_count, w_bishop_count, b_knight_count, b_bishop_count))
-    print("  {} ♕  {} ♔  │  {} ♛  {} ♚".format(w_queen_count, w_king_count, b_queen_count, b_king_count))
+    temp_out += "        REMAINING:       \n "
+    out += colors.normal(temp_out)
+    temp_out = colors.colors_ansi(colors.Black, colors.Light_gray, "  White:   ")
+    out += temp_out
+    temp_out = colors.colors_ansi(colors.White, colors.Gray, "│")
+    out += temp_out + colors.RESET
+    temp_out = colors.colors_ansi(colors.White, colors.Dark_gray, "   Black:  ") + colors.color_bg_only(colors.Dark_red, " ")
+    out += temp_out + "\n"
 
-    # print(" ",end="")
-    # for i in range(23):
-    #     print("¯",end="")
-    print("\n", end = "")
+    # print white pawn
+    temp_out = colors.normal("  {} ".format(w_pawn_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_pawn)
+    out += temp_out
+
+    # print white rook
+    temp_out = colors.normal("  {} ".format(w_rook_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_rook)
+    temp_out += colors.normal("  │")
+    out += temp_out
+
+    # print black pawn
+    "  {} ♟  {} ♜"
+    temp_out = colors.normal("  {} ".format(b_pawn_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_pawn)
+    out += temp_out
+
+    # print black rook
+    temp_out = colors.normal("  {} ".format(b_rook_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_rook)
+    temp_out += colors.normal("  \n")
+    out += temp_out
+
+    ### ROW 2 ###
+
+    # print white knight
+    temp_out = colors.normal("  {} ".format(w_knight_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_knight)
+    out += temp_out
+
+    # print white bishop
+    temp_out = colors.normal("  {} ".format(w_bishop_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_bishop)
+    temp_out += colors.normal("  │")
+    out += temp_out
+
+    # print black knight
+    "  {} ♟  {} ♜"
+    temp_out = colors.normal("  {} ".format(b_knight_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_knight)
+    out += temp_out
+
+    # print black bishop
+    temp_out = colors.normal("  {} ".format(b_bishop_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_bishop)
+    temp_out += colors.normal("  \n")
+    out += temp_out
+
+    ### ROW 3 ###
+
+    # print white queen
+    temp_out = colors.normal("  {} ".format(w_queen_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_queen)
+    out += temp_out
+
+    # print white king
+    temp_out = colors.normal("  {} ".format(w_king_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_king)
+    temp_out += colors.normal("  │")
+    out += temp_out
+
+    # print black queen
+    "  {} ♟  {} ♜"
+    temp_out = colors.normal("  {} ".format(b_queen_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_queen)
+    out += temp_out
+
+    # print black king
+    temp_out = colors.normal("  {} ".format(b_king_count))
+    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_king)
+    temp_out += colors.normal("  \n\n")
+    out += temp_out
+
+    print(out + colors.RESET, end = "")
+
+    # print("  {} ♙  {} ♖  │  {} ♟  {} ♜".format(w_pawn_count, w_rook_count, b_pawn_count, b_rook_count))
+    # print("  {} ♘  {} ♗  │  {} ♞  {} ♝".format(w_knight_count, w_bishop_count, b_knight_count, b_bishop_count))
+    # print("  {} ♕  {} ♔  │  {} ♛  {} ♚".format(w_queen_count, w_king_count, b_queen_count, b_king_count))
 
 def startScreen():
+    board.populate()
     while True:
         try:
             clear()
             print("\n Welcome to Chess: Python Edition!\n\n")
             n = input(" How many players for this game?\n (0, 1, or 2): ")
+            choices(n)
 
         except ValueError:
             print("\n Please choose an option.")
-            print("\n Press Enter to continue.")
-            input("")
+            input("\n Press Enter to continue.")
             continue
 
         if (not n.isdigit()) or (int(n) < 0) or (int(n) > 2):
@@ -242,8 +325,7 @@ def startScreen():
         speedMenu()
 
     formatMenu()
-
-    board.populate()
+    globVar.ready = True
 
     return True
 
@@ -281,7 +363,7 @@ def formatMenu():
             clear()
             print("\n How do you want the game to look?")
             print("\n 1. Fancy")
-            print("    (some graphics via Unicode / ANSI trickery")
+            print("    (some graphics via Unicode / ANSI trickery)")
             print("\n 2. Classic")
             print("    (all ASCII, i.e. use for old school Windows cmd)")
 
@@ -457,3 +539,9 @@ def loadSave():
     else:
         # board.populate()
         startScreen()
+
+def not_ready_error():
+    clear()
+    print("\n Oops! Game was not saved properly.")
+    input("\n Press Enter to load a new game.")
+    startScreen()

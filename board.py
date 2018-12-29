@@ -13,12 +13,16 @@ grid = []
 def populate():
     place = 0
     global grid
+    grid = []
+
+    # initialize global variables
+    resetGlobal()
 
     # fill grid with empty Squares
     for i in range(16):
         grid.append([])
         for j in range(16):
-            grid[i].append(Square(False, "b", pieces.Piece("none", "pawn"), i, j))
+            grid[i].append(Square(False, "b", pieces.Piece("none", "none"), i, j))
 
     # alternate colors
     for i in range(8):
@@ -126,8 +130,6 @@ def populate():
         while len(grid[i]) > 8:
             grid[i].pop()
 
-    # initialize global variables
-    resetGlobal()
 
 # return reference to grid
 def Grid(row, col):
@@ -156,6 +158,9 @@ def resetGlobal():
     globVar.p_b_Moves = []
     globVar.p_w_Num = -1
     globVar.p_b_Num = -1
+    globVar.w_pieces = []
+    globVar.b_pieces = []
+    globVar.firstPawns = []
 
 # update grid with toSqr
 def uGrid(pc):

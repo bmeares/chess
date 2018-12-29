@@ -3,6 +3,7 @@ import globVar
 import utils
 import pieces
 from square import Square
+import Canvas
 
 def readSave():
     save = open("chess.save", "r")
@@ -29,6 +30,9 @@ def readSave():
         read_p_moves(save)
         # read firstPawns
         read_firstPawns(save)
+
+    if not globVar.ready:
+        Canvas.not_ready_error()
 
 def readBoard(save):
     board.populate()
@@ -190,6 +194,8 @@ def readGlobal(save):
         globVar.slow_speed = False
     unicode = save.readline().strip('\n')
     globVar.unicode = (unicode == "True")
+    ready = save.readline().strip('\n')
+    globVar.ready = (ready == "True")
 
 def readPiecesArrays(save, c):
     wp_array = save.readline().split(',')

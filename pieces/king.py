@@ -4,6 +4,7 @@ import board
 import copy
 import globVar
 import utils
+import colors
 
 class King(Piece):
     def __init__(self, color, type):
@@ -12,9 +13,9 @@ class King(Piece):
     def __str__(self):
         if(globVar.unicode):
             if(self.color == "W"):
-                return "\u2654"
+                return colors.w_king
             else:
-                return "\u265A"
+                return colors.b_king
         else:
             if(self.color == "W"):
                 return "K"

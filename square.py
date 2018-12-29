@@ -72,7 +72,11 @@ class Square:
             #     return colors.bg_ansi("  ", "white")
 
         if self.color == "black" and globVar.unicode:
-            out = colors.bg_ansi(out, "black")
+            out = colors.color_bg_only(colors.Brown, out)
+            # out = colors.colors_ansi(colors.White, colors.Brown, out)
+            # out = colors.bg_ansi(out, "black")
         elif globVar.unicode:
-            out = colors.bg_ansi(out, "white")
+            out = colors.color_bg_only(colors.Tan, out)
+            # out = colors.colors_ansi(colors.Black, colors.Tan, out)
+            # out = colors.bg_ansi(out, "white")
         return out

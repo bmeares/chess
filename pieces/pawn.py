@@ -1,5 +1,6 @@
 from pieces import Piece
 import board
+import colors
 
 class Pawn(Piece):
     def __init__(self, color, type):
@@ -10,9 +11,9 @@ class Pawn(Piece):
         import globVar
         if(globVar.unicode):
             if(self.color == "W"):
-                return "\u2659"
+                return colors.w_pawn
             else:
-                return "\u265F"
+                return colors.b_pawn
         else:
             if(self.color == "W"):
                 return "P"

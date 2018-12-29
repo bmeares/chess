@@ -159,6 +159,8 @@ def writeGlobal(save):
     save.write("\n")
     save.write(str(globVar.unicode))
     save.write("\n")
+    save.write(str(globVar.ready))
+    save.write("\n")
 
 def writePiecesArrays(save):
     # save w_pieces

@@ -1,6 +1,7 @@
 from pieces import Piece
 import board
 import globVar
+import colors
 
 class Bishop(Piece):
     def __init__(self, color, type):
@@ -9,9 +10,9 @@ class Bishop(Piece):
     def __str__(self):
         if(globVar.unicode):
             if(self.color == "W"):
-                return "\u2657"
+                return colors.w_bishop
             else:
-                return "\u265D"
+                return colors.b_bishop
         else:
             if(self.color == "W"):
                 return "B"

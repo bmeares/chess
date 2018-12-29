@@ -52,6 +52,7 @@ firstPawnsNum = 1
 checkmate = False
 slow_speed = False
 unicode = False
+ready = False
 w_pieces = []
 b_pieces = []
 r_w_pieces = [pieces.Pawn("none", "none")]
