@@ -3,6 +3,10 @@ This is a text-based version of Chess written in Python.
 
 Use `python3 main.py` to run, or run the .exe I compiled for Windows (check the releases tab).
 
+You can toggle between fancy graphics (Unicode / ANSI magic) and classic ASCII (i.e. for old Windows).
+![Fancy](https://i.imgur.com/sdLRtp9.png) ![Clasic](https://i.imgur.com/8sXVB08.png)
+
+
 **Features:**
 - Autosaves your progress
 - Outputs each turn to a .txt file
