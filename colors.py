@@ -2,10 +2,42 @@ import colorama
 import platform
 import os
 import globVar
+
+def change_font_windows():
+    import ctypes
+
+    LF_FACESIZE = 32
+    STD_OUTPUT_HANDLE = -11
+
+    class COORD(ctypes.Structure):
+        _fields_ = [("X", ctypes.c_short), ("Y", ctypes.c_short)]
+
+    class CONSOLE_FONT_INFOEX(ctypes.Structure):
+        _fields_ = [("cbSize", ctypes.c_ulong),
+                    ("nFont", ctypes.c_ulong),
+                    ("dwFontSize", COORD),
+                    ("FontFamily", ctypes.c_uint),
+                    ("FontWeight", ctypes.c_uint),
+                    ("FaceName", ctypes.c_wchar * LF_FACESIZE)]
+
+    font = CONSOLE_FONT_INFOEX()
+    font.cbSize = ctypes.sizeof(CONSOLE_FONT_INFOEX)
+    font.nFont = 12
+    font.dwFontSize.X = 11
+    font.dwFontSize.Y = 18
+    font.FontFamily = 54
+    font.FontWeight = 800
+    font.FaceName = "Lucida Console"
+
+    handle = ctypes.windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
+    ctypes.windll.kernel32.SetCurrentConsoleFontEx(
+            handle, ctypes.c_long(False), ctypes.pointer(font))
+
 if(platform.system() == "Windows"):
     colorama.init(convert = True)
-    # os.console.font = "Lucida Console"
     os.system("chcp 65001")
+    os.system("CLS")
+    change_font_windows()
 
 class Color:
     def __init__(self, r, g, b):
@@ -42,9 +74,13 @@ BRIGHT_BLUE_BG = "\033[104m"
 BRIGHT_RED_FG = "\033[91m"
 BRIGHT_RED_BG = "\033[101m"
 DULL_YELLOW_FG = "\033[33m"
-BRIGHT_YELLOW_BG = "\033[43m"
+BRIGHT_YELLOW_BG = "\033[103m"
+BRIGHT_YELLOW_FG = "\033[93m"
 DULL_RED_FG = "\033[31m"
 DULL_RED_BG = "\033[41m"
+BRIGHT_CYAN_FG = "\033[96m"
+BRIGHT_GREEN_FG = "\033[92m"
+BRIGHT_MAGENTA_FG = "\033[95m"
 
 BLOCK = "█"
 MAP = ""
@@ -100,16 +136,6 @@ def set_mode():
 
 def blink_ansi(text):
     return "\x1b[5m" + text + "\x1b[0m"
-
-def bg_ansi(text, color):
-    if color == "white":
-        return "\x1b[;47m" + text + "\x1b[0m"
-        # return "\x1b[30;107m" + text + "\x1b[0m"
-    if color == "black":
-        # return "\x1b[37;40m" + text + "\x1b[0m"
-        return "\x1b[;100m" + text + "\x1b[0m"
-    if color == "grey" or color == "gray":
-        return "\x1b[48;5;8m" + text + "\x1b[0m"
 
 def white_header(text):
     if globVar.unicode:

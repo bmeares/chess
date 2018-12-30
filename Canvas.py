@@ -71,7 +71,7 @@ def drawBoard_unicode():
     for i in range(8):
         out_2 += '  {}  '.format(numLabel)
         for j in range(8):
-            out_2 += colors.RESET
+            # out_2 += colors.RESET
             out_2 += colors.normal(str(board.Grid(i, j)))
         numLabel -= 1
         out_2 += colors.RESET + colors.normal("    \n")
