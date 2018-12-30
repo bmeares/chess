@@ -1,4 +1,3 @@
-import colorama
 import platform
 import os
 import globVar
@@ -34,6 +33,7 @@ def change_font_windows():
             handle, ctypes.c_long(False), ctypes.pointer(font))
 
 if(platform.system() == "Windows"):
+    import colorama
     colorama.init(convert = True)
     os.system("chcp 65001")
     os.system("CLS")
