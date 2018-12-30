@@ -27,17 +27,15 @@ class Square:
         out = ""
 
         if self.des:
-            out += colors.BRIGHT_GREEN_FG
+            if globVar.unicode or globVar.limited_unicode:
+                out += colors.BRIGHT_GREEN_FG
             if self.pieceStatus and self.option < 10:
                 out += str(self.piece)
-                out += colors.BRIGHT_MAGENTA_FG
-                # print(self.piece, end = "")
+                if globVar.unicode or globVar.limited_unicode:
+                    out += colors.BRIGHT_MAGENTA_FG
             elif self.option < 10:
                 out += " "
-                # print(" ",end="")
             out += str(self.option)
-
-            # print(self.option, end="")
 
         elif self.pieceStatus:
             out += str(self.piece)
@@ -45,16 +43,11 @@ class Square:
                 out += "^"
                 if globVar.unicode:
                     out = colors.blink_ansi(out)
-                # out += colors.BRIGHT_YELLOW_FG + str(self.option)
-
             else:
                 if self.piece.color == "W":
                     out += "'"
-                    # print("'", end="")
                 elif self.piece.color == "b":
                     out += "."
-                    # print(".", end="")
-
         else:
             out += "  "
             if not globVar.unicode and self.color == "black" and not globVar.limited_unicode:
