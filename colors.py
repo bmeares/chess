@@ -1,3 +1,12 @@
+import colorama
+import platform
+import os
+import globVar
+if(platform.system() == "Windows"):
+    colorama.init(convert = True)
+    # os.console.font = "Lucida Console"
+    os.system("chcp 65001")
+
 class Color:
     def __init__(self, r, g, b):
         self.r = r
@@ -14,15 +23,28 @@ Dark_red = Color(130, 5, 5)
 Light_gray = Color(211, 211, 211)
 Gray = Color(130, 130, 130)
 Dark_gray = Color(50, 50, 50)
-BLUE  = "\033[1;34m"
+
+BLUE_FG  = "\033[34m"
+BLUE_BG  = "\033[44m"
 CYAN  = "\033[1;36m"
 GREEN = "\033[0;32m"
 RESET = "\033[0;0m"
 BOLD    = "\033[;1m"
 REVERSE = "\033[;7m"
-BRIGHT_WHITE = "\033[1;107m"
-DARK_BLACK = "\033[1;30m"
-
+BRIGHT_WHITE = "\033[107m"
+BRIGHT_WHITE_FG = "\033[97m"
+DULL_WHITE_FG = "\033[37m"
+DULL_WHITE_BG = "\033[47m"
+DARK_BLACK = "\033[30m"
+DARK_BLACK_BG = "\033[40m"
+BRIGHT_BLUE_FG = "\033[94m"
+BRIGHT_BLUE_BG = "\033[104m"
+BRIGHT_RED_FG = "\033[91m"
+BRIGHT_RED_BG = "\033[101m"
+DULL_YELLOW_FG = "\033[33m"
+BRIGHT_YELLOW_BG = "\033[43m"
+DULL_RED_FG = "\033[31m"
+DULL_RED_BG = "\033[41m"
 
 BLOCK = "█"
 MAP = ""
@@ -53,6 +75,23 @@ b_king = color_fore_only(Black, "♚")
 b_queen = color_fore_only(Black, "♛")
 b_rook = color_fore_only(Black, "♜")
 
+def limited_pieces():
+    global w_pawn, w_bishop, w_knight, w_king, w_queen, w_rook
+    global b_pawn, b_bishop, b_knight, b_king, b_queen, b_rook
+    w_pawn = BRIGHT_WHITE_FG + "P"
+    w_bishop = BRIGHT_WHITE_FG + "B"
+    w_knight = BRIGHT_WHITE_FG + "N"
+    w_king = BRIGHT_WHITE_FG + "K"
+    w_queen = BRIGHT_WHITE_FG + "Q"
+    w_rook = BRIGHT_WHITE_FG + "R"
+
+    b_pawn = DARK_BLACK + "p"
+    b_bishop = DARK_BLACK + "b"
+    b_knight = DARK_BLACK + "n"
+    b_king = DARK_BLACK + "k"
+    b_queen = DARK_BLACK + "q"
+    b_rook = DARK_BLACK + "r"
+
 def inverse_ansi(text):
     return "\x1b[7m" + text + "\x1b[0m"
 
@@ -72,8 +111,27 @@ def bg_ansi(text, color):
     if color == "grey" or color == "gray":
         return "\x1b[48;5;8m" + text + "\x1b[0m"
 
+def white_header(text):
+    if globVar.unicode:
+        return colors.colors_ansi(colors.Black, colors.Light_gray, text)
+    if globVar.limited_unicode:
+        return DARK_BLACK + BRIGHT_WHITE + text
+
+def black_header(text):
+    if globVar.unicode:
+        return colors.colors_ansi(colors.White, colors.Dark_gray, text)
+    if globVar.limited_unicode:
+        return BRIGHT_WHITE_FG + DARK_BLACK_BG + text
+
+def header_separator(text):
+    if globVar.unicode:
+        return colors.colors_ansi(colors.White, colors.Gray, text)
+    if globVar.limited_unicode:
+        return BRIGHT_WHITE_FG + DULL_WHITE_BG + text
 
 def normal(text):
+    if globVar.limited_unicode:
+        return DULL_YELLOW_FG + DULL_RED_BG + text
     return colors_ansi(Pale_yellow, Dark_red, text)
 
 if __name__ == '__main__':

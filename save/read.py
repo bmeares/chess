@@ -182,20 +182,21 @@ def readGlobal(save):
     else:
         globVar.no_w_king = False
     globVar.firstPawnsNum = int(save.readline().strip('\n'))
+
     checkmate = save.readline().strip('\n')
-    if checkmate == "True":
-        globVar.checkmate = True
-    else:
-        globVar.checkmate = False
+    globVar.checkmate = (checkmate == "True")
+
     slow_speed = save.readline().strip('\n')
-    if slow_speed == "True":
-        globVar.slow_speed = True
-    else:
-        globVar.slow_speed = False
+    globVar.slow_speed = (slow_speed == "True")
+
     unicode = save.readline().strip('\n')
     globVar.unicode = (unicode == "True")
+
     ready = save.readline().strip('\n')
     globVar.ready = (ready == "True")
+
+    limited = save.readline().strip('\n')
+    globVar.limited_unicode = (limited == "True")
 
 def readPiecesArrays(save, c):
     wp_array = save.readline().split(',')

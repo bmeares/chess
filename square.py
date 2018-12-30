@@ -39,7 +39,6 @@ class Square:
 
         elif self.pieceStatus:
             out += str(self.piece)
-            # print(self.piece, end="")
             if self.piece.selected:
                 out += "^"
                 if globVar.unicode:
@@ -56,27 +55,18 @@ class Square:
 
         else:
             out += "  "
-            if not globVar.unicode and self.color == "black":
+            if not globVar.unicode and self.color == "black" and not globVar.limited_unicode:
                 out = a_block
-            # if self.color == "black":
-            #     if(globVar.unicode):
-            #         return colors.bg_ansi("  ", "black")
-            #         # return u_block
-            #     else:
-            #         return a_block
-            #     # if platform.system() == "Windows":
-            #     #     return a_block
-            #     # else:
-            #     #     return u_block
-            # elif self.color == "white":
-            #     return colors.bg_ansi("  ", "white")
 
-        if self.color == "black" and globVar.unicode:
-            out = colors.color_bg_only(colors.Brown, out)
-            # out = colors.colors_ansi(colors.White, colors.Brown, out)
-            # out = colors.bg_ansi(out, "black")
-        elif globVar.unicode:
-            out = colors.color_bg_only(colors.Tan, out)
-            # out = colors.colors_ansi(colors.Black, colors.Tan, out)
-            # out = colors.bg_ansi(out, "white")
+        if globVar.unicode:
+            if self.color == "black":
+                out = colors.color_bg_only(colors.Brown, out)
+            else:
+                out = colors.color_bg_only(colors.Tan, out)
+
+        elif globVar.limited_unicode:
+            if self.color == "black":
+                out = colors.BRIGHT_BLUE_BG + out
+            else:
+                out = colors.BRIGHT_RED_BG + out
         return out

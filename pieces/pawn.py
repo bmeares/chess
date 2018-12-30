@@ -9,7 +9,7 @@ class Pawn(Piece):
 
     def __str__(self):
         import globVar
-        if(globVar.unicode):
+        if(globVar.unicode or globVar.limited_unicode):
             if(self.color == "W"):
                 return colors.w_pawn
             else:

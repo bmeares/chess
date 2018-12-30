@@ -3,6 +3,7 @@ This module contains functions that display text to the screen, such as error
 messages and the game board.
 """
 
+import colors
 import os
 import platform
 import random
@@ -10,11 +11,10 @@ import board
 import globVar
 import sys
 import utils
-import colors
 from save import *
 
 def drawBoard():
-    if globVar.unicode:
+    if globVar.unicode or globVar.limited_unicode:
         drawBoard_unicode()
     else:
         drawBoard_ascii()
@@ -66,12 +66,12 @@ def drawBoard_unicode():
     out_2 += "    \n    "
     for i in range(21):
         out_2 += " "
-    # for i in range(18):
-    #     out += "_"
+
     out_2 += "\n"
     for i in range(8):
         out_2 += '  {}  '.format(numLabel)
         for j in range(8):
+            out_2 += colors.RESET
             out_2 += colors.normal(str(board.Grid(i, j)))
         numLabel -= 1
         out_2 += colors.RESET + colors.normal("    \n")
@@ -83,7 +83,7 @@ def drawBoard_unicode():
     # print(colors.inverse_ansi(out), end = "")
 
 def nowPlaying():
-    if globVar.unicode:
+    if globVar.unicode or globVar.limited_unicode:
         nowPlaying_unicode()
     else:
         nowPlaying_ascii()
@@ -156,7 +156,7 @@ def pawn_to_new():
     return int(choice)
 
 def remaining():
-    if globVar.unicode:
+    if globVar.unicode or globVar.limited_unicode:
         remaining_unicode()
     else:
         remaining_ascii()
@@ -206,13 +206,13 @@ def remaining_unicode():
     out = ""
     temp_out = ""
 
-    temp_out += "        REMAINING:       \n "
+    temp_out += "        REMAINING:       \n"
     out += colors.normal(temp_out)
-    temp_out = colors.colors_ansi(colors.Black, colors.Light_gray, "  White:   ")
+    temp_out = colors.white_header("   White:   ")
     out += temp_out
-    temp_out = colors.colors_ansi(colors.White, colors.Gray, "│")
+    temp_out = colors.header_separator("│")
     out += temp_out + colors.RESET
-    temp_out = colors.colors_ansi(colors.White, colors.Dark_gray, "   Black:  ") + colors.color_bg_only(colors.Dark_red, " ")
+    temp_out = colors.black_header("   Black:   ")
     out += temp_out + "\n"
 
     # print white pawn
@@ -227,7 +227,6 @@ def remaining_unicode():
     out += temp_out
 
     # print black pawn
-    "  {} ♟  {} ♜"
     temp_out = colors.normal("  {} ".format(b_pawn_count))
     temp_out += colors.color_bg_only(colors.Dark_red, colors.b_pawn)
     out += temp_out
@@ -252,7 +251,6 @@ def remaining_unicode():
     out += temp_out
 
     # print black knight
-    "  {} ♟  {} ♜"
     temp_out = colors.normal("  {} ".format(b_knight_count))
     temp_out += colors.color_bg_only(colors.Dark_red, colors.b_knight)
     out += temp_out
@@ -277,7 +275,6 @@ def remaining_unicode():
     out += temp_out
 
     # print black queen
-    "  {} ♟  {} ♜"
     temp_out = colors.normal("  {} ".format(b_queen_count))
     temp_out += colors.color_bg_only(colors.Dark_red, colors.b_queen)
     out += temp_out
@@ -364,8 +361,10 @@ def formatMenu():
             print("\n How do you want the game to look?")
             print("\n 1. Fancy")
             print("    (some graphics via Unicode / ANSI trickery)")
-            print("\n 2. Classic")
-            print("    (all ASCII, i.e. use for old school Windows cmd)")
+            print("\n 2. Sorta fancy")
+            print("    (use ASCII for pieces, keep colors)")
+            print("\n 3. Classic")
+            print("    (all ASCII, i.e. use this when all else fails)")
 
             n = input("\n Option: ")
             choices(n)
@@ -383,7 +382,10 @@ def formatMenu():
         else:
             break
 
-    globVar.unicode = (int(n) == 1)
+    globVar.unicode = (int(n) == 1)# or (int(n) == 2)
+    globVar.limited_unicode = (int(n) == 2)
+    if globVar.limited_unicode:
+        colors.limited_pieces()
 
 def chooseAvailableMessage():
     errorSeparator()

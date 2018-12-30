@@ -11,7 +11,7 @@ class King(Piece):
         Piece.__init__(self, color, type)
 
     def __str__(self):
-        if(globVar.unicode):
+        if(globVar.unicode or globVar.limited_unicode):
             if(self.color == "W"):
                 return colors.w_king
             else:
