@@ -217,23 +217,23 @@ def remaining_unicode():
 
     # print white pawn
     temp_out = colors.normal("  {} ".format(w_pawn_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_pawn)
+    temp_out += colors.normal(colors.w_pawn)
     out += temp_out
 
     # print white rook
     temp_out = colors.normal("  {} ".format(w_rook_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_rook)
+    temp_out += colors.normal(colors.w_rook)
     temp_out += colors.normal("  │")
     out += temp_out
 
     # print black pawn
     temp_out = colors.normal("  {} ".format(b_pawn_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_pawn)
+    temp_out += colors.normal(colors.b_pawn)
     out += temp_out
 
     # print black rook
     temp_out = colors.normal("  {} ".format(b_rook_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_rook)
+    temp_out += colors.normal(colors.b_rook)
     temp_out += colors.normal("  \n")
     out += temp_out
 
@@ -241,23 +241,23 @@ def remaining_unicode():
 
     # print white knight
     temp_out = colors.normal("  {} ".format(w_knight_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_knight)
+    temp_out += colors.normal(colors.w_knight)
     out += temp_out
 
     # print white bishop
     temp_out = colors.normal("  {} ".format(w_bishop_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_bishop)
+    temp_out += colors.normal(colors.w_bishop)
     temp_out += colors.normal("  │")
     out += temp_out
 
     # print black knight
     temp_out = colors.normal("  {} ".format(b_knight_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_knight)
+    temp_out += colors.normal(colors.b_knight)
     out += temp_out
 
     # print black bishop
     temp_out = colors.normal("  {} ".format(b_bishop_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_bishop)
+    temp_out += colors.normal(colors.b_bishop)
     temp_out += colors.normal("  \n")
     out += temp_out
 
@@ -265,23 +265,23 @@ def remaining_unicode():
 
     # print white queen
     temp_out = colors.normal("  {} ".format(w_queen_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_queen)
+    temp_out += colors.normal(colors.w_queen)
     out += temp_out
 
     # print white king
     temp_out = colors.normal("  {} ".format(w_king_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.w_king)
+    temp_out += colors.normal(colors.w_king)
     temp_out += colors.normal("  │")
     out += temp_out
 
     # print black queen
     temp_out = colors.normal("  {} ".format(b_queen_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_queen)
+    temp_out += colors.normal(colors.b_queen)
     out += temp_out
 
     # print black king
     temp_out = colors.normal("  {} ".format(b_king_count))
-    temp_out += colors.color_bg_only(colors.Dark_red, colors.b_king)
+    temp_out += colors.normal(colors.b_king)
     temp_out += colors.normal("  \n\n")
     out += temp_out
 
@@ -374,7 +374,7 @@ def formatMenu():
             input("")
             continue
 
-        if (not n.isdigit()) or (int(n) < 1) or (int(n) > 2):
+        if (not n.isdigit()) or (int(n) < 1) or (int(n) > 3):
             print("\n Please choose an option.")
             print("\n Press Enter to continue.")
             input("")

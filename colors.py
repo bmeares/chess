@@ -113,21 +113,21 @@ def bg_ansi(text, color):
 
 def white_header(text):
     if globVar.unicode:
-        return colors.colors_ansi(colors.Black, colors.Light_gray, text)
+        return colors_ansi(Black, Light_gray, text)
     if globVar.limited_unicode:
         return DARK_BLACK + BRIGHT_WHITE + text
 
 def black_header(text):
     if globVar.unicode:
-        return colors.colors_ansi(colors.White, colors.Dark_gray, text)
+        return colors_ansi(White, Dark_gray, text)
     if globVar.limited_unicode:
         return BRIGHT_WHITE_FG + DARK_BLACK_BG + text
 
 def header_separator(text):
     if globVar.unicode:
-        return colors.colors_ansi(colors.White, colors.Gray, text)
+        return colors_ansi(White, Gray, text)
     if globVar.limited_unicode:
-        return BRIGHT_WHITE_FG + DULL_WHITE_BG + text
+        return DULL_YELLOW_FG + DULL_WHITE_BG + text
 
 def normal(text):
     if globVar.limited_unicode:
