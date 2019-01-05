@@ -15,8 +15,10 @@ import os
 from save import *
 
 def check_pawn(pc):
-    if (pc.type == "pawn" and (globVar.player == "W" and
-    pc.row == 0) or (globVar.player == "b" and pc.row == 7)):
+    W_success = (pc.type == "pawn") and (globVar.player == "W") and (pc.row == 0)
+    b_success = (pc.type == "pawn") and (globVar.player == "b") and (pc.row == 7)
+
+    if W_success or b_success:
         if ((globVar.numPlayers == 1 and globVar.player == "W")
         or globVar.numPlayers == 2):
             choice = Canvas.pawn_to_new()

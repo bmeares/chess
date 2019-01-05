@@ -33,6 +33,8 @@ class Square:
                 out += str(self.piece)
                 if globVar.unicode or globVar.limited_unicode:
                     out += colors.BRIGHT_MAGENTA_FG
+            elif self.pieceStatus: # clean this up
+                out += colors.BRIGHT_MAGENTA_FG
             elif self.option < 10:
                 out += " "
             out += str(self.option)
