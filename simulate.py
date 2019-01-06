@@ -58,7 +58,7 @@ def draw_score(i):
         print("   " + str(W_r) + "%", end = "")
         print("         " + str(b_r) + "%")
 
-    print("Average number of moves: ", end = "")
+    print("\n Average number of moves: ", end = "")
     if i == 0:
         print("0")
     else:
