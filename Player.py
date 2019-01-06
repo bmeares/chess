@@ -55,7 +55,7 @@ def ai_turn():
             Canvas.drawBoard()
 
     utils.un_resetAvailMoves(availMoves)
-    choice = randChoose(len(availMoves))
+    choice = randChoose(availMoves)
     utils.record_user_move(fpc, availMoves, choice)
     pc = utils.move(fromSqr, availMoves, choice)
     # Check for check
@@ -127,9 +127,27 @@ def choose(availMoves):
 
     return choice
 
-def randChoose(a):
-    Canvas.drawBoard()
+def randChoose(availMoves):
     if globVar.numPlayers == 1 or globVar.slow_speed:
+        Canvas.drawBoard()
         time.sleep(0.5)
-    choice = random.randint(0, 100) % a
-    return choice
+
+    if globVar.aggressive:
+        collisions = []
+        for p in availMoves:
+            if p.pieceStatus:
+                collisions.append(p)
+        if collisions:
+            return collisions[(random.randint(0, 100) % len(collisions))].option
+
+    if globVar.chill:
+        no_collisions = []
+        for p in availMoves:
+            if not p.pieceStatus:
+                no_collisions.append(p)
+        if no_collisions:
+            return no_collisions[(random.randint(0, 100) % len(no_collisions))].option
+
+    # if there are no pieces that fit the criteria
+    # or if the user is playing on Normal, return a random choice
+    return random.randint(0, 100) % len(availMoves)

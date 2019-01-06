@@ -13,6 +13,7 @@ import pieces
 import random
 import os
 from save import *
+import simulate
 
 def check_pawn(pc):
     W_success = (pc.type == "pawn") and (globVar.player == "W") and (pc.row == 0)
@@ -134,25 +135,29 @@ def checkWin():
 
     if (globVar.p_w_Num == 0 or len(globVar.p_w_moves) == 0 or
     len(globVar.w_pieces) == 1 or globVar.no_w_king):
-        # Canvas.clear()
         won = True
         globVar.checkmate = True
-        Canvas.drawBoard()
-        print(" Black wins!")
-        print("\n Press Enter to exit.")
-        input("")
-        delete_save()
+        if not globVar.simulation:
+            Canvas.drawBoard()
+            print(" Black wins!")
+            print("\n Press Enter to exit.")
+            input("")
+            delete_save()
+        else:
+            simulate.b_victories += 1
 
     elif (globVar.p_b_Num == 0 or len(globVar.p_b_moves) == 0 or
     len(globVar.b_pieces) == 1 or globVar.no_b_king):
-        # Canvas.clear()
         won = True
         globVar.checkmate = True
-        Canvas.drawBoard()
-        print(" White wins!")
-        print("\n Press Enter to exit.")
-        input("")
-        delete_save()
+        if not globVar.simulation:
+            Canvas.drawBoard()
+            print(" White wins!")
+            print("\n Press Enter to exit.")
+            input("")
+            delete_save()
+        else:
+            simulate.W_victories += 1
 
     return won
 

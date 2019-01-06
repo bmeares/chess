@@ -12,8 +12,11 @@ import globVar
 import sys
 import utils
 from save import *
+import simulate
 
 def drawBoard():
+    if globVar.simulation:
+        return
     if globVar.unicode or globVar.limited_unicode:
         drawBoard_unicode()
     else:
@@ -80,7 +83,6 @@ def drawBoard_unicode():
     out_2 += colors.normal("\n")
     out = out_1 + out_2 + colors.RESET
     print(out, end = "")
-    # print(colors.inverse_ansi(out), end = "")
 
 def nowPlaying():
     if globVar.unicode or globVar.limited_unicode:
@@ -133,7 +135,6 @@ def nowPlaying_unicode():
         out_2 += "═"
     out_2 += "╝ "
     out = colors.normal(out_1) + colors.normal(out_2)
-    # out = colors.colors_ansi(colors.Pale_yellow, colors.Dark_red, out_1) + colors.colors_ansi(colors.Pale_yellow, colors.Dark_red, out_2)
     return out + colors.RESET
 
 def pawn_to_new():
@@ -293,30 +294,19 @@ def remaining_unicode():
 
 def startScreen():
     board.populate()
-    while True:
-        try:
-            clear()
-            print("\n Welcome to Chess: Python Edition!\n\n")
-            n = input(" How many players for this game?\n (0, 1, or 2): ")
-            choices(n)
+    title = "Welcome to Chess: Python Edition!\n\n" + " How many players for this game?\n (0, 1, or 2)"
+    options = []
+    n = validOption(0, 2, title, options)
 
-        except ValueError:
-            print("\n Please choose an option.")
-            input("\n Press Enter to continue.")
-            continue
-
-        if (not n.isdigit()) or (int(n) < 0) or (int(n) > 2):
-            print("\n Please choose an option.")
-            print("\n Press Enter to continue.")
-            input("")
-            continue
-        else:
-            break
-
+    if globVar.simulation:
+        clear()
+        print("Running...")
+        return True
     globVar.numPlayers = int(n)
 
     if globVar.numPlayers < 2:
         random.seed(a=None)
+        aggressiveMenu()
     if globVar.numPlayers == 0:
         globVar.noPlayers = True
         speedMenu()
@@ -326,66 +316,96 @@ def startScreen():
 
     return True
 
-def speedMenu():
+def validOption(min, max, title, options):
     while True:
         try:
             clear()
-            print("\n At what speed would you like the AI to play?")
-            print("\n 1. Slow enough to watch the game")
-            print(" 2. Full speed ahead")
+            print("\n " + title + "\n")
+            for i in range(len(options)):
+                print("  " + str(i + 1) + ". " + str(options[i]))
+
             n = input("\n Option: ")
-            choices(n)
         except ValueError:
-            print("\n Please choose an option.")
-            print("\n Press Enter to continue.")
-            input("")
+            print("\n Error!")
+            input("\n Press Enter to continue.")
             continue
 
-        if (not n.isdigit()) or (int(n) < 1) or (int(n) > 2):
+        if choices(n):
+            exit()
+
+        if (not n.isdigit()) or (n.isdigit() and int(n) < min) or (n.isdigit() and int(n) > max):
             print("\n Please choose an option.")
             print("\n Press Enter to continue.")
             input("")
             continue
         else:
-            break
+            return n
+
+
+def speedMenu():
+    title = "At what speed would you like the AI to play?"
+    options = []
+    options.append("Slow enough to watch the game")
+    options.append("Full speed ahead")
+    n = validOption(1, 2, title, options)
 
     if int(n) == 1:
         globVar.slow_speed = True
     else:
         globVar.slow_speed = False
 
+def aggressive_message():
+    clear()
+    print("\n What kind of an AI do you want?")
+    print("\n 1. Normal")
+    print(" 2. Aggressive")
+    print(" 3. Chill")
+
+def aggressiveMenu():
+    title = "What kind of an AI do you want?"
+    options = []
+    options.append("Normal")
+    options.append("Aggressive")
+    options.append("Chill")
+
+    n = validOption(1, len(options), title, options)
+
+    if int(n) == 1:
+        globVar.aggressive = False
+        globVar.chill = False
+    elif int(n) == 2:
+        globVar.aggressive = True
+        globVar.chill = False
+    else:
+        globVar.aggressive = False
+        globVar.chill = True
+
 def formatMenu():
-    while True:
-        try:
-            clear()
-            print("\n How do you want the game to look?")
-            print("\n 1. Fancy")
-            print("    (some graphics via Unicode / ANSI trickery)")
-            print("\n 2. Sorta fancy")
-            print("    (use ASCII for pieces, keep colors)")
-            print("\n 3. Classic")
-            print("    (all ASCII, i.e. use this when all else fails)")
+    title = "How do you want the game to look?"
+    options = []
+    options.append("Fancy\n     (some graphics via Unicode / ANSI trickery)\n")
+    options.append("Sorta fancy\n     (use ASCII for pieces, keep colors)\n")
+    options.append("Classic\n     (all ASCII, i.e. use this when all else fails)\n")
 
-            n = input("\n Option: ")
-            choices(n)
-        except ValueError:
-            print("\n Please choose an option.")
-            print("\n Press Enter to continue.")
-            input("")
-            continue
+    n = validOption(1, len(options), title, options)
 
-        if (not n.isdigit()) or (int(n) < 1) or (int(n) > 3):
-            print("\n Please choose an option.")
-            print("\n Press Enter to continue.")
-            input("")
-            continue
-        else:
-            break
-
-    globVar.unicode = (int(n) == 1)# or (int(n) == 2)
+    globVar.unicode = (int(n) == 1)
     globVar.limited_unicode = (int(n) == 2)
     if globVar.limited_unicode:
-        colors.limited_pieces()
+        colors.limited_pieces() # change unicode pieces to letters
+
+def simulateMenu():
+    clear()
+    globVar.simulation = True
+    globVar.numPlayers = 0
+    globVar.slow_speed = False
+    max_sims = 1000
+    title = "How many simulations do you want to run?\n (between 1 and " + str(max_sims) + ")"
+    options = []
+    n = validOption(1, max_sims, title, options)
+    aggressiveMenu()
+    globVar.ready = True
+    simulate.begin(n)
 
 def chooseAvailableMessage():
     errorSeparator()
@@ -433,9 +453,7 @@ def errorSeparator():
         print("-",end="")
 
 def clear():
-    if platform.system() == "Linux":
-        os.system("clear")
-    elif platform.system() == "Darwin":
+    if platform.system() == "Linux" or platform.system() == "Darwin":
         os.system("clear")
     elif platform.system() == "Windows":
         os.system("CLS")
@@ -503,16 +521,24 @@ def chooseMove(availMovesL):
 def choices(choice):
     if choice.upper() == "Q":
         quit()
+        return True
     elif choice.upper() == "R":
         board.populate()
         clear()
         print("\n The board has been reset.")
         pressEnter()
+        return True
     elif choice.upper() == "L":
         utils.readSave()
         clear()
         print("\n The last save has been loaded.")
         pressEnter()
+        return True
+    elif choice.upper() == "S":
+        simulateMenu()
+        return True
+    else:
+        return False
 
 def quit():
     clear()
