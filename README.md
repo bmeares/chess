@@ -3,8 +3,8 @@ This is a text-based version of Chess written in Python.
 
 Use `python3 main.py` to run, or run the .exe I compiled for Windows (check the releases tab).
 
-You can toggle between fancy graphics (Unicode / ANSI magic) and classic ASCII (i.e. for old Windows).
-![Fancy](https://i.imgur.com/sdLRtp9.png) ![Clasic](https://i.imgur.com/8sXVB08.png)
+You can toggle between fancy graphics (Unicode / ANSI magic), sorta fancy (for legacy systems), and classic ASCII (typically a last resort).
+![Fancy](https://i.imgur.com/sdLRtp9.png) ![Sorta fancy](https://i.imgur.com/TTWpJTv.png) ![Clasic](https://i.imgur.com/8sXVB08.png)
 
 
 **Features:**
@@ -16,6 +16,9 @@ You can toggle between fancy graphics (Unicode / ANSI magic) and classic ASCII (
 - Displays the remaining number of pieces on the board
 - Exchange pawns for other pieces when reaching the other side of the board
 - 0, 1, or 2 player modes
+
+**Simulation mode:**
+Enter "s" at any menu prompt to enter Simulation Mode. From here you can run up to 1000 games and see the resulting statistics. This feature is functional yet is still under construction, so let me know if you have any suggestions!
 
 This project demonstrates inheritance by using six types of pieces, each with
 its own scan() function. The program tracks players' remaining moves and pieces
