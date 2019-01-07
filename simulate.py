@@ -1,12 +1,13 @@
-# import main
 import sys
 import globVar
 import Player
 import utils
 import board
 import Canvas
-from multiprocessing import Pool, Process, Value, Queue, Lock, cpu_count
+# import multiprocessing.forking
+import multiprocessing
 import os
+import sys
 import colors
 import platform
 
@@ -45,28 +46,28 @@ def begin(n):
     set_globals()
     global N
     N = n
-    W_v = Value('i', 0)
-    b_v = Value('i', 0)
-    total_num_moves = Value('i', 0)
-    games_played = Value('i', 0)
-    num = Value('i', int(n))
-    lock = Lock()
+    W_v = multiprocessing.Value('i', 0)
+    b_v = multiprocessing.Value('i', 0)
+    total_num_moves = multiprocessing.Value('i', 0)
+    games_played = multiprocessing.Value('i', 0)
+    num = multiprocessing.Value('i', int(n))
+    lock = multiprocessing.Lock()
 
     procs = []
     for i in range(int(n)):
-        procs.append(Process(target = run, args = (total_num_moves, games_played, W_v, b_v, lock, i, num)))
+        procs.append(multiprocessing.Process(target = run, args = (total_num_moves, games_played, W_v, b_v, lock, i, num)))
 
     progress(games_played, num)
 
     done = 0
     while done < int(N):
-        for i in range(cpu_count()):
+        for i in range(multiprocessing.cpu_count()):
             if done + i < int(N):
                 procs[done + i].start()
-        for i in range(cpu_count()):
+        for i in range(multiprocessing.cpu_count()):
             if done + i < int(N):
                 procs[done + i].join()
-        done += cpu_count()
+        done += multiprocessing.cpu_count()
 
     Canvas.clear()
     print("\n Done! Below is the final score.")
@@ -127,6 +128,5 @@ def set_globals():
     globVar.slow_speed = False
     globVar.ready = True
 
-if __name__ == "__main__":
-    set_globals()
-    begin(2)
+if __name__ == '__main__':
+    multiprocessing.freeze_support()
