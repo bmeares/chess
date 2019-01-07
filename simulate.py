@@ -42,6 +42,7 @@ def run(total_num_moves, games_played, W_v, b_v, lock, i):
     b_v.value += b_victories
     lock.acquire()
     progress(games_played)
+    draw_score(i, W_v, b_v, total_num_moves, games_played)
     lock.release()
 
 def begin(n):
