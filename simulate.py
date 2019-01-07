@@ -60,10 +60,15 @@ def begin(n):
 
     progress(games_played)
 
-    for p in procs:
-        p.start()
-    for p in procs:
-        p.join()
+    done = 0
+    while done < int(N):
+        for i in range(cpu_count()):
+            if done + i < int(N):
+                procs[done + i].start()
+        for i in range(cpu_count()):
+            if done + i < int(N):
+                procs[done + i].join()
+        done += cpu_count()
 
     Canvas.clear()
     print("\n Done! Below is the final score.")
