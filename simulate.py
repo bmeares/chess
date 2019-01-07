@@ -72,6 +72,7 @@ def begin(n):
     Canvas.clear()
     print("\n Done! Below is the final score.")
     draw_score(int(n), W_v, b_v, total_num_moves, games_played, num)
+    Canvas.pressEnter()
 
 def draw_status(i, n):
     Canvas.clear()
