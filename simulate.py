@@ -8,18 +8,20 @@ import Canvas
 from multiprocessing import Pool, Process, Value, Queue, Lock, cpu_count
 import os
 import colors
+import platform
 
 W_victories = 0
 b_victories = 0
 N = 0
 
-def run(total_num_moves, games_played, W_v, b_v, lock, i):
-    # lock.acquire()
-    # draw_status(i, N)
-    # draw_score(i, W_v, b_v, total_num_moves, games_played)
-    # lock.release()
+def run(total_num_moves, games_played, W_v, b_v, lock, i, num):
+    if platform.system() == "Windows":
+        lock.acquire()
+        progress(games_played, num)
+        lock.release()
 
     board.populate()
+    set_globals()
     playing = True
     while playing:
         if (globVar.playerCount % 2) == 0:
@@ -30,19 +32,13 @@ def run(total_num_moves, games_played, W_v, b_v, lock, i):
         Player.turn()
         globVar.playerCount += 1
         playing = not utils.checkWin()
-
-        # lock.acquire()
-        # progress(games_played)
-        # # print(".", flush = True, end = "")
-        # # print(name, flush = True, end = "")
-        # lock.release()
         total_num_moves.value += 1
     games_played.value += 1
     W_v.value += W_victories
     b_v.value += b_victories
     lock.acquire()
-    progress(games_played)
-    draw_score(i, W_v, b_v, total_num_moves, games_played)
+    progress(games_played, num)
+    draw_score(i, W_v, b_v, total_num_moves, games_played, num)
     lock.release()
 
 def begin(n):
@@ -53,13 +49,14 @@ def begin(n):
     b_v = Value('i', 0)
     total_num_moves = Value('i', 0)
     games_played = Value('i', 0)
+    num = Value('i', int(n))
     lock = Lock()
 
     procs = []
     for i in range(int(n)):
-        procs.append(Process(target = run, args = (total_num_moves, games_played, W_v, b_v, lock, i)))
+        procs.append(Process(target = run, args = (total_num_moves, games_played, W_v, b_v, lock, i, num)))
 
-    progress(games_played)
+    progress(games_played, num)
 
     done = 0
     while done < int(N):
@@ -73,14 +70,15 @@ def begin(n):
 
     Canvas.clear()
     print("\n Done! Below is the final score.")
-    draw_score(int(n), W_v, b_v, total_num_moves, games_played)
+    draw_score(int(n), W_v, b_v, total_num_moves, games_played, num)
 
 def draw_status(i, n):
     Canvas.clear()
     print("\n Running simulation " + str(i + 1) + " of " + str(n) + ".")
 
-def progress(games_played):
+def progress(games_played, num):
     Canvas.clear()
+    global N
     title = "PROGRESS"
     buffer = int(os.get_terminal_size().columns / 2) - int(len(title) / 2)
     print("\n", end = "")
@@ -89,7 +87,7 @@ def progress(games_played):
     print(colors.BOLD + title + colors.RESET)
 
     length = int((os.get_terminal_size().columns - 2) / 2)
-    r_complete = games_played.value / int(N)
+    r_complete = games_played.value / int(num.value)
     num_to_draw = int(r_complete * length)
 
     print("\n " + colors.BRIGHT_GREEN_BG, end = "")
@@ -100,9 +98,9 @@ def progress(games_played):
         print("  ", end = "")
     print(colors.RESET)
 
-    print("\n " + str(round(100 * r_complete, 2)) + "% ( " + str(games_played.value) + " / " + str(N) + " ) completed." )
+    print("\n " + str(round(100 * r_complete, 2)) + "% ( " + str(games_played.value) + " / " + str(num.value) + " ) completed." )
 
-def draw_score(i, W_v, b_v, total_num_moves, games_played):
+def draw_score(i, W_v, b_v, total_num_moves, games_played, num):
     print("\n WHITE : " + str(W_v.value) + "  |  ", end = "")
     print("BLACK : " + str(b_v.value))
     total = int(W_v.value) + int(b_v.value)
@@ -131,4 +129,4 @@ def set_globals():
 
 if __name__ == "__main__":
     set_globals()
-    run()
+    begin(2)
