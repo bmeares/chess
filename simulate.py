@@ -73,7 +73,7 @@ def begin(n):
 
     Canvas.clear()
     print("\n Done! Below is the final score.")
-    draw_score(int(n) - 1, W_v, b_v, total_num_moves, games_played)
+    draw_score(int(n), W_v, b_v, total_num_moves, games_played)
 
 def draw_status(i, n):
     Canvas.clear()
@@ -118,7 +118,7 @@ def draw_score(i, W_v, b_v, total_num_moves, games_played):
     if i == 0:
         print(total_num_moves.value)
     else:
-        avg_moves = round(total_num_moves.value / int(N), 2)
+        avg_moves = round(total_num_moves.value / int(i), 2)
         print(avg_moves)
     print("\n Played " + str(games_played.value) + " games.")
 
