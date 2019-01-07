@@ -399,7 +399,7 @@ def simulateMenu():
     globVar.simulation = True
     globVar.numPlayers = 0
     globVar.slow_speed = False
-    max_sims = 1000
+    max_sims = 1000000
     title = "How many simulations do you want to run?\n (between 1 and " + str(max_sims) + ")"
     options = []
     n = validOption(1, max_sims, title, options)
