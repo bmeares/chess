@@ -1,7 +1,7 @@
 import pieces
 import square
 
-numPlayers = -1
+numPlayers = 1 
 player = ""
 noPlayers = False
 playerCount = 0
@@ -51,12 +51,13 @@ no_w_king = False
 firstPawnsNum = 1
 checkmate = False
 slow_speed = False
-unicode = False
+unicode = True 
 ready = False
 limited_unicode = False
 aggressive = False
 chill = False
 simulation = False
+show_all_menus = False
 w_pieces = []
 b_pieces = []
 r_w_pieces = [pieces.Pawn("none", "none")]

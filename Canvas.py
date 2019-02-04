@@ -294,6 +294,9 @@ def remaining_unicode():
 
 def startScreen():
     board.populate()
+    if not globVar.show_all_menus:
+        globVar.ready = True
+        return True
     title = "Welcome to Chess: Python Edition!\n\n" + " How many players for this game?\n (0, 1, or 2)"
     options = []
     n = validOption(0, 2, title, options)
@@ -306,12 +309,15 @@ def startScreen():
 
     if globVar.numPlayers < 2:
         random.seed(a=None)
-        aggressiveMenu()
+        #  aggressiveMenu()
+        menus_driver("aggressive")
     if globVar.numPlayers == 0:
         globVar.noPlayers = True
-        speedMenu()
+        #  speedMenu()
+        menus_driver("speed")
 
-    formatMenu()
+    #  formatMenu()
+    menus_driver("format")
     globVar.ready = True
 
     return True
@@ -404,6 +410,7 @@ def simulateMenu():
     options = []
     n = validOption(1, max_sims, title, options)
     aggressiveMenu()
+
     globVar.ready = True
     simulate.begin(n)
 
@@ -518,6 +525,18 @@ def chooseMove(availMovesL):
 
     return int(choice)
 
+def menus_driver(menu):
+    if not globVar.show_all_menus:
+        return
+    if menu == "speed":
+        speedMenu()
+    elif menu == "simulate":
+        simulateMenu()
+    elif menu == "aggressive":
+        aggressiveMenu()
+    elif menu == "format":
+        formatMenu()
+
 def choices(choice):
     if choice.upper() == "Q":
         quit()
@@ -535,7 +554,8 @@ def choices(choice):
         pressEnter()
         return True
     elif choice.upper() == "S":
-        simulateMenu()
+        #  simulateMenu()
+        menus_driver("simulate")
         return True
     else:
         return False
@@ -573,3 +593,35 @@ def not_ready_error():
     print("\n Oops! Game was not saved properly.")
     input("\n Press Enter to load a new game.")
     startScreen()
+
+def help():
+    #  b = int(os.get_terminal_size().columns / 5)
+    b = 4
+    buffer = ""
+    for i in range(b):
+        buffer += "."
+
+    print("\n Options:")
+    print(" ========")
+    print("\n GRAPHICS")
+    print("   -a " + buffer + " ASCII-only")
+    print("   -l " + buffer + " Limited ANSI")
+    print("   -u " + buffer + " Full Unicode / ANSI (e.g. TrueColor)")
+    
+    print("\n GAME MODES")
+    print("   -0 " + buffer + " 0-players mode")
+    print("   -1 " + buffer + " 1-player mode")
+    print("   -2 " + buffer + " 2-players mode")
+
+    print("\n AI SETTINGS")
+    print("   -f " + buffer + " Fast")
+    print("   -s " + buffer + " Slow")
+    print("   -n " + buffer + " Normal")
+    print("   -g " + buffer + " Agressive")
+    print("   -c " + buffer + " Chill")
+
+    print("\n MISC")
+    print("   -m " + buffer + " Show all menus")
+    print("   -h " + buffer + " Show help / options")
+    print("   -i " + buffer + " Simulation")
+

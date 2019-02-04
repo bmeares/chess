@@ -191,6 +191,7 @@ def readGlobal(save):
     globVar.aggressive = (save.readline().strip('\n') == "True")
     globVar.chill = (save.readline().strip('\n') == "True")
     globVar.simulation = (save.readline().strip('\n') == "True")
+    globVar.show_all_menus = (save.readline().strip('\n') == "True")
 
 def readPiecesArrays(save, c):
     wp_array = save.readline().split(',')

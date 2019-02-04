@@ -169,6 +169,7 @@ def writeGlobal(save):
     save.write("\n")
     save.write(str(globVar.simulation))
     save.write("\n")
+    save.write(str(globVar.show_all_menus) + "\n")
 
 def writePiecesArrays(save):
     # save w_pieces
