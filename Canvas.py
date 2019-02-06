@@ -609,15 +609,15 @@ def help():
     print("   -u " + buffer + " Full Unicode / ANSI (e.g. TrueColor)")
     
     print("\n GAME MODES")
-    print("   -0 " + buffer + " 0-players mode")
-    print("   -1 " + buffer + " 1-player mode")
-    print("   -2 " + buffer + " 2-players mode")
+    print("   -0 " + buffer + " 0 Player")
+    print("   -1 " + buffer + " 1 Player")
+    print("   -2 " + buffer + " 2 Player")
 
     print("\n AI SETTINGS")
     print("   -f " + buffer + " Fast")
     print("   -s " + buffer + " Slow")
     print("   -n " + buffer + " Normal")
-    print("   -g " + buffer + " Agressive")
+    print("   -g " + buffer + " Aggressive")
     print("   -c " + buffer + " Chill")
 
     print("\n MISC")
