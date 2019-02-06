@@ -84,6 +84,20 @@ def drawBoard_unicode():
     out = out_1 + out_2 + colors.RESET
     print(out, end = "")
 
+def h_buffer():
+    b = int(os.get_terminal_size().lines / 2) - (int(board.HEIGHT / 2))
+    out = ""
+    for i in range(b):
+        out += "\n"
+    return out
+
+def w_buffer():
+    b = int(os.get_terminal_size().columns / 2) - board.WIDTH
+    out = ""
+    for i in range(b):
+        out += " "
+    return out
+
 def nowPlaying():
     if globVar.unicode or globVar.limited_unicode:
         nowPlaying_unicode()
