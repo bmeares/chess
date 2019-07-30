@@ -9,10 +9,10 @@ import utils
 import board
 import Player
 import globVar
+import colors
 import pathlib
 from save import *
 import sys
-
 def main():
     if len(sys.argv):
         parse_args(sys.argv)
@@ -66,10 +66,15 @@ def parse_args(args):
         globVar.unicode = True
         globVar.limited_unicode = False
 
-    # AI
+    if globVar.limited_unicode:
+        colors.limited_pieces()
+
+    # Game speed
     globVar.slow_speed = not ("f" in s)
     if ("s" in s):
-        globVar.slow_sleep = True
+        globVar.slow_speed = True
+
+    # AI
     if ("n" in s):
         globVar.chill = False
         globVar.aggressive = False

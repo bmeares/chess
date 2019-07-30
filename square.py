@@ -3,8 +3,8 @@ import platform
 import globVar
 import colors
 
-a_block = "##"
-u_block = u'\u2588\u2588'
+#  a_block = colors.A_BLOCK_STD
+#  u_block = u'\u2588\u2588'
 
 class Square:
     """
@@ -22,8 +22,8 @@ class Square:
 
     def __str__(self):
 
-        global a_block
-        global u_block
+        a_block = colors.BLOCK_STD
+        u_block = "  "
         out = ""
 
         if self.des:
@@ -42,14 +42,16 @@ class Square:
         elif self.pieceStatus:
             out += str(self.piece)
             if self.piece.selected:
-                out += "^"
                 if globVar.unicode:
+                    out += colors.SELECTED_UNICODE
                     out = colors.blink_ansi(out)
+                else:
+                    out += colors.SELECTED_STD
             else:
                 if self.piece.color == "W":
-                    out += "'"
+                    out += colors.UP_UNICODE if globVar.unicode else colors.UP_STD
                 elif self.piece.color == "b":
-                    out += "."
+                    out += colors.DOWN_UNICODE if globVar.unicode else colors.DOWN_STD
         else:
             out += "  "
             if not globVar.unicode and self.color == "black" and not globVar.limited_unicode:
@@ -64,7 +66,7 @@ class Square:
         elif globVar.limited_unicode:
             temp_out = ""
             if self.color == "black":
-                out = colors.BRIGHT_BLUE_BG + out
+                out = colors.BLOCK_BLACK_LIM + out
             else:
-                out = colors.BRIGHT_RED_BG + out
+                out = colors.BLOCK_WHITE_LIM + out
         return out

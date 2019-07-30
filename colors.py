@@ -46,7 +46,7 @@ class Color:
         self.b = b
 
 
-Brown = Color(86,48,8)
+Brown = Color(161,93,51)
 Tan = Color(239, 159, 83)
 White = Color(255, 255, 255)
 Black = Color(0, 0, 0)
@@ -59,21 +59,30 @@ Dark_gray = Color(50, 50, 50)
 BLUE_FG  = "\033[34m"
 BLUE_BG  = "\033[44m"
 CYAN  = "\033[1;36m"
+DULL_CYAN_BG = "\033[46m"
+DULL_CYAN_FG = "\033[36m"
+BRIGHT_CYAN_FG = "\033[96"
+BRIGHT_CYAN_BG = "\033[106"
 GREEN = "\033[0;32m"
 RESET = "\033[0;0m"
 BOLD    = "\033[;1m"
 REVERSE = "\033[;7m"
 BRIGHT_WHITE = "\033[107m"
 BRIGHT_WHITE_FG = "\033[97m"
+BRIGHT_BLACK_BG = "\033[100m"
+BRIGHT_BLACK_FG = "\033[90m"
 DULL_WHITE_FG = "\033[37m"
 DULL_WHITE_BG = "\033[47m"
 DARK_BLACK = "\033[30m"
 DARK_BLACK_BG = "\033[40m"
 BRIGHT_BLUE_FG = "\033[94m"
 BRIGHT_BLUE_BG = "\033[104m"
+DULL_BLUE_BG = "\033[44m"
+DULL_BLUE_FG = "\033[34m"
 BRIGHT_RED_FG = "\033[91m"
 BRIGHT_RED_BG = "\033[101m"
 DULL_YELLOW_FG = "\033[33m"
+DULL_YELLOW_BG = "\033[43m"
 BRIGHT_YELLOW_BG = "\033[103m"
 BRIGHT_YELLOW_FG = "\033[93m"
 DULL_RED_FG = "\033[31m"
@@ -85,6 +94,17 @@ BRIGHT_MAGENTA_FG = "\033[95m"
 
 BLOCK = "█"
 MAP = ""
+SELECTED_UNICODE = BRIGHT_GREEN_FG + "*" + RESET
+SELECTED_STD = "*"
+UP_UNICODE = "↑"
+UP_STD = "`"
+DOWN_UNICODE = "↓"
+DOWN_STD = "_"
+BLOCK_STD = "::"
+BLOCK_BLACK_LIM = BRIGHT_BLUE_BG
+BLOCK_WHITE_LIM = DULL_WHITE_BG
+
+
 
 def rgb_ansi(r,g,b,text):
     return "\x1b[38;2;" + str(r) + ";" + str(g) + ";" + str(b) + "m" + text + "\x1b[0m"
@@ -158,7 +178,7 @@ def header_separator(text):
 
 def normal(text):
     if globVar.limited_unicode:
-        return DULL_YELLOW_FG + DULL_RED_BG + text
+        return BRIGHT_YELLOW_FG + BRIGHT_BLACK_BG + text
     return colors_ansi(Pale_yellow, Dark_red, text)
 
 if __name__ == '__main__':

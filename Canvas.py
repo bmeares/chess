@@ -37,7 +37,7 @@ def drawBoard_ascii():
 
     print("\n    ",end="")
     for i in range(18):
-        print("_",end="")
+        print("-",end="")
 
     print("\n", end = "")
     for i in range(8):
@@ -191,7 +191,7 @@ def remaining_ascii():
     b_king_count = utils.typeCounter("king", "b")
 
     print(" ",end="")
-    print("       REMAINING:\n ", end="")
+    #  print("       REMAINING:\n ", end="")
     for i in range(23):
         print("-",end="")
     print("\n   White:   |   Black:")
@@ -221,7 +221,7 @@ def remaining_unicode():
     out = ""
     temp_out = ""
 
-    temp_out += "        REMAINING:       \n"
+    #  temp_out += "        REMAINING:       \n"
     out += colors.normal(temp_out)
     temp_out = colors.white_header("   White:   ")
     out += temp_out
@@ -620,16 +620,18 @@ def help():
     print("\n GRAPHICS")
     print("   -a " + buffer + " ASCII-only")
     print("   -l " + buffer + " Limited ANSI")
-    print("   -u " + buffer + " Full Unicode / ANSI (e.g. TrueColor)")
+    print("   -u " + buffer + " Full Unicode / ANSI / TrueColor")
     
     print("\n GAME MODES")
     print("   -0 " + buffer + " 0 Player")
     print("   -1 " + buffer + " 1 Player")
     print("   -2 " + buffer + " 2 Player")
 
-    print("\n AI SETTINGS")
+    print("\n SPEED")
     print("   -f " + buffer + " Fast")
     print("   -s " + buffer + " Slow")
+
+    print("\n AI")
     print("   -n " + buffer + " Normal")
     print("   -g " + buffer + " Aggressive")
     print("   -c " + buffer + " Chill")
