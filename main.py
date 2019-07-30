@@ -43,8 +43,9 @@ def state():
         Player.turn()
         globVar.playerCount += 1
         playing = not utils.checkWin()
-        utils.clearSave()
-        write.writeSave()
+        if globVar.numPlayers > 0:
+            utils.clearSave()
+            write.writeSave()
 
     return playing
 
