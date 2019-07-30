@@ -1,14 +1,12 @@
-- [Chess](#chess)
-	- [Installation](#installation)
-	- [Screenshots](#screenshots)
-	- [Options](#options)
-	- [Simulation mode](#simulation-mode)
-	- [Bugs](#bugs)
-	- [To be implemented](#to-be-implemented)
+## Table of Contents
+- [Table of Contents](#table-of-contents)
+- [Installation](#installation)
+- [Screenshots](#screenshots)
+- [Options](#options)
+- [Simulation mode](#simulation-mode)
+- [Bugs](#bugs)
+- [To be implemented](#to-be-implemented)
 
-
-# Chess
-This is a text-based version of chess written in Python.
 
 ## Installation
 Clone the repository and run `main.py`. Example:
