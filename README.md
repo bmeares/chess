@@ -58,22 +58,11 @@ Below is a list of the currently supported options:
    -i .... Simulation
 ```
 
+
 ## Simulation mode
 
-Enter "s" at any menu prompt to enter Simulation Mode. From here you can run up to 1,000,000 games and see the resulting statistics.
+Run `main.py` with the `-i` flag to enter Simulation Mode. From here you can run as many games in parallel as the number of cores on your system.
 
-**Features:**
-- Autosaves your progress
-- Outputs each turn to a .txt file
-- Prevents players from entering check
-- Easy-to-use input
-- Can be paused/quit and resumed
-- Displays the remaining number of pieces on the board
-- Exchange pawns for other pieces when reaching the other side of the board
-- 0, 1, or 2 player modes
-
-
-I should have caught most bugs! Let me know how you break my code.
 
 ## Bugs
 - Check indicator seems to sometimes display check when not in check
