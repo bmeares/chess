@@ -17,7 +17,10 @@ python3 main.py
 ```
 
 ## Screenshots
-<img src="https://i.imgur.com/2NMN1bR.png" alt="Fancy" height=400> <img src="https://i.imgur.com/h96NoMK.png" alt="Sorta fancy" height=400> <img src="https://i.imgur.com/HbfKPGS.png" alt="Classic" height=400>
+<img src="https://i.imgur.com/2NMN1bR.png" alt="Fancy" height=400>
+<img src="https://i.imgur.com/h96NoMK.png" alt="Sorta fancy" height=400>
+<img src="https://i.imgur.com/HbfKPGS.png" alt="Classic" height=400>
+<img src="https://i.imgur.com/4NxhxOL.png" alt="Simulation" height=120>
 
 
 ## Options
