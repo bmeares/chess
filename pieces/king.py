@@ -13,7 +13,7 @@ class King(Piece):
     def __str__(self):
         if(globVar.unicode or globVar.limited_unicode):
             if(self.color == "W"):
-                return colors.w_king
+                return colords.w_king
             else:
                 return colors.b_king
         else:
