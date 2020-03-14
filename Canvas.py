@@ -64,11 +64,12 @@ def drawBoard_unicode():
     numLabel = 8
     letterLabel = 'A'
     out_2 += colors.normal("\n     ")
+    out_2 += " "
     for i in range(8):
-        out_2 += colors.normal(str(letterLabel + " "))
+        out_2 += colors.normal(str(letterLabel + "  "))
         letterLabel = chr(ord(letterLabel) + 1)
 
-    out_2 += "    \n    "
+    #out_2 += "    \n    "
     for i in range(21):
         out_2 += " "
 
@@ -138,7 +139,7 @@ def nowPlaying_unicode():
         p += colors.b_king
 
     out_1 += "╔"
-    for i in range(21):
+    for i in range(19):
         out_1 += "═"
     out_1 += "╗ "
     if ((globVar.w_check and globVar.player == "W") or
@@ -149,7 +150,7 @@ def nowPlaying_unicode():
         out_1 += "\n ║" + "      CHECKMATE!     "
         out_2 += "║ \n"
     else:
-        out_1 += "\n ║" + "    NOW PLAYING:  " + p
+        out_1 += "\n ║" + "    NOW PLAYING: " + p
         out_2 += "  ║ \n"
     out_2 += " ╚"
     for i in range(21):
@@ -471,11 +472,10 @@ def pawnError():
 
 
 def inputError():
-    # print(" Press Enter to continue.")
-    # input("")
-    drawBoard()
     print(" Invalid Input")
-
+    print(" Press Enter to continue.")
+    input("")
+    drawBoard()
 
 def pressEnter():
     print(" Press Enter to continue.")
